@@ -91,5 +91,5 @@ RewriteRule "README.md$" - [F,L]
 </FilesMatch>
 
 # Redirect root access to public/ if necessary (optional, but good for security)
-# RewriteRule ^$ public/ [L]
-# RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+RewriteRule ^$ public/ [L]
+RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
