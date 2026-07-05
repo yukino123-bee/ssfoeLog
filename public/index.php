@@ -95,7 +95,7 @@ if (array_key_exists($path, $routes)) {
         
         $controller = new $controllerName();
         $controller->$methodName();
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         error_log('Route handling error: ' . $e->getMessage());
         if (ob_get_level() > 0) {
             ob_end_clean();
@@ -105,6 +105,7 @@ if (array_key_exists($path, $routes)) {
         echo "<p>An unexpected error occurred. Please try again later.</p>";
         echo "<div style='background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-family: sans-serif;'>";
         echo "<strong>Debug info:</strong> " . htmlspecialchars($e->getMessage());
+        echo "<br><strong>File:</strong> " . htmlspecialchars($e->getFile() . ':' . $e->getLine());
         echo "</div>";
     }
 } else {
