@@ -1,0 +1,95 @@
+# Disable Directory Indexing
+Options -Indexes
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# ============================================================================
+# SECURITY HEADERS
+# ============================================================================
+
+# Prevent MIME type sniffing
+Header always set X-Content-Type-Options "nosniff"
+
+# Prevent clickjacking
+Header always set X-Frame-Options "DENY"
+
+# Enable XSS filter in older browsers
+Header always set X-XSS-Protection "1; mode=block"
+
+# Referrer Policy
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Permissions Policy (formerly Feature Policy)
+Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+# HTTPS Strict Transport Security (1 year, includeSubDomains)
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+# ============================================================================
+# HTTPS ENFORCEMENT
+# ============================================================================
+
+# Redirect HTTP to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Remove www prefix (optional - comment out if you need www)
+# RewriteCond %{HTTP_HOST} ^www\.
+# RewriteRule ^(.*)$ https://%{HTTP_HOST:www.}%{REQUEST_URI} [L,R=301]
+
+# ============================================================================
+# PROTECTION
+# ============================================================================
+
+# Protect sensitive directories
+RewriteRule ^(app|database|storage|routes|scratch|node_modules|vendor)($|/) - [F,L]
+
+# Prevent access to hidden files and directories
+RewriteRule "^\." - [F,L]
+
+# Prevent access to sensitive files
+RewriteRule "\.env$" - [F,L]
+RewriteRule "\.git" - [F,L]
+RewriteRule "\.gitignore$" - [F,L]
+RewriteRule "composer.json$" - [F,L]
+RewriteRule "composer.lock$" - [F,L]
+RewriteRule "README.md$" - [F,L]
+
+# Prevent PHP execution in upload and storage directories
+<Directory "*/uploads/*">
+    <FilesMatch "\.(php|phtml|php3|php4|php5|php6|php7|phar)$">
+        Deny from all
+    </FilesMatch>
+</Directory>
+
+<Directory "*/storage/*">
+    <FilesMatch "\.(php|phtml|php3|php4|php5|php6|php7|phar)$">
+        Deny from all
+    </FilesMatch>
+</Directory>
+
+# ============================================================================
+# CACHING
+# ============================================================================
+
+# Cache static assets
+<FilesMatch "\.(?:jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$">
+    Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
+
+# Don't cache HTML files
+<FilesMatch "\.html?$">
+    Header set Cache-Control "max-age=0, public, must-revalidate"
+</FilesMatch>
+
+# Don't cache PHP files
+<FilesMatch "\.php$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</FilesMatch>
+
+# Redirect root access to public/ if necessary (optional, but good for security)
+# RewriteRule ^$ public/ [L]
+# RewriteRule ^((?!public/).*)$ public/$1 [L,NC]

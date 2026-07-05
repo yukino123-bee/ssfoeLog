@@ -1,0 +1,17 @@
+SSFO — Troubleshooting
+==============================
+
+• “Table req_employment_medical doesn't exist”  
+  Use the updated code: medical and employment use req_medical and req_employment. Run migrations if request_logs or client_apply_access is missing.
+
+• Status update errors  
+  Ensure database/migrations/002_request_logs_and_access.sql has been applied so request_logs exists.
+
+• Reports period filter  
+  Use the dropdown; it submits the form and sends ?period=day|week|month.
+
+• Client cannot apply  
+  They must use Request access → wait for approval → Unlock programs with referral + PIN.
+
+• Maintenance mode  
+  storage/maintenance.flag with contents 1 shows the maintenance page for all public/client URLs except /admin and /login.

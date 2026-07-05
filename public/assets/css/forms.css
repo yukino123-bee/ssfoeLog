@@ -1,0 +1,543 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Theme variables */
+:root {
+  --brand: #dc2626; /* Red 600 */
+  --brand-600: #b91c1c; /* Red 700 */
+  --brand-700: #991b1b; /* Red 800 */
+  --text: #0f172a; /* Slate 900 */
+  --muted: #64748b; /* Slate 500 */
+  --bg: #f8fafc; /* Slate 50 */
+  --card: #ffffff;
+  --border: #e2e8f0; /* Slate 200 */
+  --ring: rgba(220, 38, 38, 0.35);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Base refinements */
+body {
+  color: var(--text);
+  background: var(--bg);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Validation Error Messages */
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Links default — remove heavy button look globally */
+a {
+  color: var(--brand);
+  font-weight: 600;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  width: auto;
+  text-shadow: none;
+  filter: none;
+}
+
+a:hover { text-decoration: none; transform: none; }
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo img { display: block; }
+.logo h1 { margin-left: 10px; font-weight: 800; letter-spacing: 0.2px; }
+
+/* Header button */
+.trackbtn {
+  width: auto;
+  height: auto;
+  padding: 10px 20px;
+  background: var(--brand);
+  color: #ffffff;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 700;
+  text-shadow: none;
+  filter: none;
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.trackbtn:hover {
+  background: var(--brand-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Main wrapper */
+.mdiv {
+  gap: 18px;
+  padding: 28px 20px;
+  background: transparent;
+}
+
+/* Programs grid */
+.programs {
+  display: grid;
+  gap: 8px;
+  min-height: 100vh;
+}
+
+/* Assistance card */
+.assisstance {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 18px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.assisstance:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: #e2e8f0; /* gray-200/300 */
+}
+.assisstance img {
+  width: 100%;
+  height: auto; /* revert to natural image height */
+  object-fit: contain; /* prevent cropping */
+  border-radius: 6px;
+}
+.assisstance h1 {
+  margin: 14px 6px 10px;
+  font-size: clamp(16px, 2.2vw, 24px);
+  font-weight: 800;
+}
+/* Make the card CTA a full-width primary button */
+.assisstance a {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--brand);
+  color: #fff;
+  border: 1px solid var(--brand);
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.assisstance a:hover { text-decoration: none; background: var(--brand-600); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+/* Reusable buttons for forms */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:hover { background: var(--brand-600); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--brand);
+  border-color: var(--brand);
+}
+.btn-outline:hover { background: #fff5f5; }
+
+/* Forms — shared */
+.burial,
+.educational,
+.medical,
+.employment,
+.transport {
+  display: grid;
+  justify-content: center;
+  gap: 14px;
+}
+
+.burial div,
+.educational div,
+.medical div,
+.employment div,
+.transport div {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card);
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  gap: 4px;
+}
+
+.burial div > *,
+.educational div > *,
+.medical div > *,
+.employment div > *,
+.transport div > * {
+  margin-bottom: 0;
+}
+
+.burial label,
+.educational label,
+.medical label,
+.employment label,
+.transport label,
+.trackmdiv label {
+  margin: 0 0 8px 0;
+  font-weight: var(--font-semibold);
+  color: var(--text);
+  font-size: var(--text-sm);
+  display: block;
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+}
+
+.burial label:not(:first-child),
+.educational label:not(:first-child),
+.medical label:not(:first-child),
+.employment label:not(:first-child),
+.transport label:not(:first-child) {
+  margin-top: 20px;
+}
+
+.burial input,
+.burial select,
+.educational input,
+.educational select,
+.medical input,
+.medical select,
+.employment input,
+.employment select,
+.transport input,
+.transport select,
+.trackmdiv input {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: var(--text-base);
+  font-family: var(--font-primary);
+  background: #fff;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  height: auto;
+  color: var(--text);
+  line-height: var(--leading-normal);
+}
+
+.burial input::placeholder,
+.educational input::placeholder,
+.medical input::placeholder,
+.employment input::placeholder,
+.transport input::placeholder,
+.trackmdiv input::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.burial select,
+.educational select,
+.medical select,
+.employment select,
+.transport select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+/* Hover/Focus */
+.burial select:hover,
+.educational select:hover,
+.medical select:hover,
+.employment select:hover,
+.transport select:hover,
+.trackmdiv input:hover,
+.burial input:hover,
+.educational input:hover,
+.medical input:hover,
+.employment input:hover,
+.transport input:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.burial input:focus,
+.educational input:focus,
+.medical input:focus,
+.employment input:focus,
+.transport input:focus,
+select:focus,
+.trackmdiv input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.burial input:disabled,
+.educational input:disabled,
+.medical input:disabled,
+.employment input:disabled,
+.transport input:disabled,
+select:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* File Input Styling */
+.burial input[type="file"],
+.educational input[type="file"],
+.medical input[type="file"],
+.employment input[type="file"],
+.transport input[type="file"] {
+  padding: 0;
+  border: 2px dashed #d1d5db;
+  background: #f9fafb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.burial input[type="file"]::file-selector-button,
+.educational input[type="file"]::file-selector-button,
+.medical input[type="file"]::file-selector-button,
+.employment input[type="file"]::file-selector-button,
+.transport input[type="file"]::file-selector-button {
+  padding: 10px 20px;
+  margin-right: 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.burial input[type="file"]::file-selector-button:hover,
+.educational input[type="file"]::file-selector-button:hover,
+.medical input[type="file"]::file-selector-button:hover,
+.employment input[type="file"]::file-selector-button:hover,
+.transport input[type="file"]::file-selector-button:hover {
+  background: var(--brand-600);
+}
+
+.burial input[type="file"]:hover,
+.educational input[type="file"]:hover,
+.medical input[type="file"]:hover,
+.employment input[type="file"]:hover,
+.transport input[type="file"]:hover {
+  border-color: var(--brand);
+  background: #fff;
+}
+
+.burial input[type="file"]:focus,
+.educational input[type="file"]:focus,
+.medical input[type="file"]:focus,
+.employment input[type="file"]:focus,
+.transport input[type="file"]:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* Headings */
+.burial h2,
+.educational h2,
+.medical h2,
+.employment h2,
+.transport h2 {
+  font-size: clamp(22px, 2.6vw, 30px);
+  margin: 6px 0 18px;
+  font-weight: 900;
+  position: relative;
+}
+
+/* Accent underline */
+.burial h2::after,
+.educational h2::after,
+.medical h2::after,
+.employment h2::after,
+.transport h2::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: var(--brand);
+  border-radius: 2px;
+  margin-top: 10px;
+}
+
+/* Separators */
+.burial hr,
+.educational hr,
+.medical hr,
+.employment hr,
+.transport hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  width: 100%;
+  margin: 10px 0 6px;
+}
+
+/* Submit buttons in sections */
+.burial button,
+.educational button,
+.medical button,
+.employment button,
+.transport button,
+.trackmdiv button {
+  margin-top: 28px;
+  padding: 14px 28px;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  width: auto;
+  min-width: 160px;
+}
+
+.burial button:hover,
+.educational button:hover,
+.medical button:hover,
+.employment button:hover,
+.transport button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(227, 34, 34, 0.2);
+}
+
+.burial button:active,
+.educational button:active,
+.medical button:active,
+.employment button:active,
+.transport button:active {
+  transform: translateY(0);
+}
+
+/* Track page */
+.trackmdiv {
+  min-height: 100vh;
+  padding: 28px 20px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.trackmdiv form {
+  width: 640px;
+  max-width: 95vw;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin: 0 auto; /* center horizontally */
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.trackmdiv form label {
+  margin: 0;
+  white-space: nowrap;
+}
+.trackmdiv form .input-wrapper {
+  flex: 1;
+  position: relative;
+}
+.trackmdiv form input {
+  width: 100%;
+}
+.trackmdiv .error-message {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+.trackmdiv button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.trackmdiv button:hover { background: var(--brand-600); }
+
+.trackmdiv form:focus-within {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Results card */
+.results {
+  width: 100%;
+  max-width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+}
+.results h2 { font-size: clamp(18px, 2.4vw, 26px); }
+
+/* Responsive adjustments — complements responsive.css but safe standalone */
+@media (max-width: 1024px) {
+  .programs { gap: 18px; }
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 10px 12px; }
+  .welcome { padding: 18px; }
+  .assisstance { padding: 14px; }
+  .trackbtn { font-size: 13px; padding: 8px 14px; }
+  .burial div,
+  .educational div,
+  .medical div,
+  .employment div,
+  .transport div { padding: 16px; }
+}
+
+@media (max-width: 480px) {
+  .welcome p { font-size: 13px; }
+  .trackbtn { font-size: 12px; }
+  .assisstance a { font-size: 14px; padding: 10px 14px; }
+}

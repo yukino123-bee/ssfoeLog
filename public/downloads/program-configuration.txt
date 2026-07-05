@@ -1,0 +1,12 @@
+SSFO — Program configuration notes
+=========================================
+
+Each assistance type maps to its own detail table:
+  - educational -> req_educational
+  - medical      -> req_medical
+  - burial       -> req_burial
+  - employment   -> req_employment
+  - transportation -> req_transportation
+
+Programs list in the admin “Programs” section defines descriptions and visibility.
+Guest beneficiaries must complete “Request access” and be approved before the Apply forms unlock.

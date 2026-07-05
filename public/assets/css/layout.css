@@ -1,0 +1,241 @@
+/* Layout: navigation bar, containers, grid wrappers */
+
+/* Header css */
+.navbar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background-color: #ffffff;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    gap: 16px;
+}
+
+.navbar h1 {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: var(--font-bold);
+    margin: 0;
+    flex: 1;
+    text-align: center;
+    color: var(--text);
+}
+
+/* Dashboard Content */
+.mdiv {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: calc(100vh - 80px);
+    width: 100%;
+    padding: 32px 24px;
+    background: transparent;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.educational-mdiv {
+    padding: 0;
+}
+
+.welcome {
+    padding: 64px 24px;
+    background: linear-gradient(180deg, #ffffff 0%, #fef2f2 100%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border-radius: 24px;
+    border: 1px solid #fee2e2;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.welcome::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--brand), var(--brand-600));
+}
+
+.welcome h1 {
+    margin: 0 0 12px 0;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: var(--font-extrabold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text);
+}
+
+.welcome h1 span {
+    background: linear-gradient(135deg, var(--brand-700) 0%, var(--brand) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: var(--brand);
+}
+
+.welcome .subtitle {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: var(--font-medium);
+    color: #374151;
+    margin: 0 0 24px 0;
+}
+
+.welcome .description {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    line-height: 1.6;
+    color: #6b7280;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Programs Grid */
+.programs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    width: 100%;
+    padding-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+    .programs {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .programs {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1400px) {
+    .programs {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 1400px;
+    }
+}
+
+/* Track Page Layout */
+.trackmdiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: calc(100vh - 80px);
+    width: 100%;
+    padding: 32px 24px;
+    background: transparent;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 24px;
+}
+
+.track-intro {
+    text-align: center;
+    max-width: 640px;
+    margin-bottom: 8px;
+}
+
+.track-intro h2 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+/* Educational Page Layout */
+.educational-mdiv {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Responsive adjustments for navbar */
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+        padding: 12px 16px;
+    }
+
+    .navbar h1 {
+        order: 3;
+        width: 100%;
+        margin-top: 8px;
+        font-size: clamp(0.875rem, 2vw, 1rem);
+        text-align: center;
+    }
+
+    .logo {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .logo img {
+        max-height: 50px;
+    }
+
+    .logo h1 {
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
+    }
+
+    .trackbtn {
+        min-width: 100px;
+        padding: 10px 16px;
+        font-size: var(--text-sm);
+    }
+
+    .mdiv {
+        padding: 20px 16px;
+        gap: 20px;
+    }
+
+    .trackmdiv {
+        padding: 24px 16px;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px 12px;
+    }
+
+    .logo img {
+        max-height: 45px;
+    }
+
+    .logo h1 {
+        font-size: 1rem;
+    }
+
+    .navbar h1 {
+        font-size: 0.875rem;
+        margin-top: 6px;
+    }
+
+    .trackbtn {
+        min-width: 90px;
+        padding: 8px 12px;
+        font-size: var(--text-xs);
+    }
+
+    .mdiv {
+        padding: 16px 12px;
+        gap: 16px;
+    }
+
+    .trackmdiv {
+        padding: 20px 12px;
+        gap: 16px;
+    }
+}

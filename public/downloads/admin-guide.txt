@@ -1,0 +1,11 @@
+SSFO Facilitator — Admin Guide (summary)
+================================================
+
+1. Dashboard: Review KPIs and recent activity.
+2. All Requests: Open any row to see human-readable program details and documents.
+3. Apply Request / Permissions: Queue of applications pending review.
+4. Guest access: When a beneficiary requests access, they receive a referral code. After you approve, give them the PIN shown in the success message.
+5. Reports: Use By Program / By Period filters; selections reload the page via the form.
+6. Announcements: Posts appear on the public Announcements page for clients.
+
+For database setup, run database/complete_schema.sql then database/migrations/002_request_logs_and_access.sql if upgrading.

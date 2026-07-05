@@ -1,0 +1,2 @@
+# Prevent direct access to storage directory
+Deny from all

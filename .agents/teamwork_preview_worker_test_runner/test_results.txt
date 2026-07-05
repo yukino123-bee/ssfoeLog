@@ -1,0 +1,104 @@
+========================================================================
+SSFO TEST RUNNER OUTPUT - 2026-07-04 13:15:37
+========================================================================
+
+Running: test_db.php
+Description: Tests database connection and queries the users table.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\test_db.php
+Exit Code: 0
+Output:
+ID: 1 - Email: admin@ssfo.local - Hash: $2y$12$7x87QrsxE.JRsTfgvsGyyOlScyXwfRV64gkbsRvDxklCU1pI.mZhK
+ID: 2 - Email: maria.santos@email.com - Hash: $2y$12$7x87QrsxE.JRsTfgvsGyyOlScyXwfRV64gkbsRvDxklCU1pI.mZhK
+ID: 3 - Email: juan.delacruz@email.com - Hash: $2y$12$7x87QrsxE.JRsTfgvsGyyOlScyXwfRV64gkbsRvDxklCU1pI.mZhK
+ID: 4 - Email: rosa.garcia@email.com - Hash: $2y$12$7x87QrsxE.JRsTfgvsGyyOlScyXwfRV64gkbsRvDxklCU1pI.mZhK
+ID: 5 - Email: carlos.reyes@email.com - Hash: $2y$12$7x87QrsxE.JRsTfgvsGyyOlScyXwfRV64gkbsRvDxklCU1pI.mZhK
+ID: 6 - Email: angela.miguel@email.com - Hash: $2y$12$7x87QrsxE.JRsTfgvsGyyOlScyXwfRV64gkbsRvDxklCU1pI.mZhK
+Status: PASS
+------------------------------------------------------------------------
+
+Running: check_tables.php
+Description: Tests showing tables in the database with hardcoded credentials.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\check_tables.php
+Exit Code: 255
+Output:
+
+Fatal error: Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: YES) in C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\check_tables.php:2
+Stack trace:
+#0 C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\check_tables.php(2): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'ssfo')
+#1 {main}
+  thrown in C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\check_tables.php on line 2
+Status: FAIL
+------------------------------------------------------------------------
+
+Running: fix_passwords.php
+Description: Updates all user passwords in the database to a new hash of admin123.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\fix_passwords.php
+Exit Code: 0
+Output:
+New hash for admin123: $2y$12$U6oPCj2BbD7MRItPd6IaluoPwxQhFlRKFyhT/tXjzDZ2i06kppHda
+Database updated successfully.
+Status: PASS
+------------------------------------------------------------------------
+
+Running: test_export.php
+Description: Fetches all requests and checks if details contain reference path indicators.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\test_export.php
+Exit Code: 0
+Output:
+Total requests: 8
+Req ID: 8, Name: Rosa Garcia, Details has _path: NO
+Req ID: 4, Name: Carlos Reyes, Details has _path: NO
+Req ID: 1, Name: Maria Santos, Details has _path: NO
+Req ID: 6, Name: Maria Santos, Details has _path: NO
+Req ID: 7, Name: Juan Dela Cruz, Details has _path: NO
+Req ID: 2, Name: Juan Dela Cruz, Details has _path: NO
+Req ID: 5, Name: Angela Miguel, Details has _path: NO
+Req ID: 3, Name: Rosa Garcia, Details has _path: NO
+Status: PASS
+------------------------------------------------------------------------
+
+Running: test_export2.php
+Description: Validates request detail JSON payload and verifies if uploaded file paths exist on disk.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\test_export2.php
+Exit Code: 0
+Output:
+Processing Request ID 8
+Processing Request ID 4
+Processing Request ID 1
+Processing Request ID 6
+Processing Request ID 7
+Processing Request ID 2
+Processing Request ID 5
+Processing Request ID 3
+Final hasFiles: false
+Status: PASS
+------------------------------------------------------------------------
+
+Running: test_hash.php
+Description: Verifies a hardcoded password hash against the string admin123.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\test_hash.php
+Exit Code: 0
+Output:
+bool(false)
+Status: FAIL
+------------------------------------------------------------------------
+
+Running: test_phpword.php
+Description: Tests PhpWord image insertion functionality with a sample image path.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\test_phpword.php
+Exit Code: 0
+Output:
+Testing with C:\Users\Mark Jed M Cagatin\Desktop\sffo/public/uploads/requests/medical_1778554935_medicalCertificate.png
+Successfully added image.
+Status: PASS
+------------------------------------------------------------------------
+
+Running: test_word_gen.php
+Description: Generates a Word document dynamically containing images from request details in the database.
+Path: C:\Users\Mark Jed M Cagatin\Desktop\sffo\scratch\test_word_gen.php
+Exit Code: 0
+Output:
+No files found.
+Status: PASS
+------------------------------------------------------------------------
+

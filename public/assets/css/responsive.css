@@ -1,0 +1,417 @@
+/* Responsive Design for Tablets and Phones */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+    .mdiv {
+        padding: 24px 16px;
+    }
+
+    .programs {
+        gap: 20px;
+    }
+
+    .applications-table {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 800px;
+    }
+}
+
+/* Mobile and Tablet */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: row;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+    }
+
+    .navbar h1 {
+        order: 3;
+        width: 100%;
+        margin-top: 8px;
+        font-size: 1rem;
+    }
+
+    .logo {
+        flex: 1;
+    }
+
+    .logo img {
+        max-height: 50px;
+    }
+
+    .logo h1 {
+        font-size: 1.125rem;
+    }
+
+    .trackbtn {
+        width: auto;
+        min-width: 100px;
+        font-size: var(--text-sm);
+        padding: 10px 16px;
+        height: auto;
+    }
+
+    .mdiv {
+        padding: 16px 12px;
+        gap: 16px;
+        max-width: 100%; /* Fluid width on mobile */
+    }
+
+    .welcome {
+        padding: 20px 14px;
+    }
+
+    .welcome h1 {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+        text-decoration: none;
+        margin-bottom: 12px;
+    }
+
+    .welcome p {
+        font-size: clamp(0.875rem, 2vw, 1rem);
+    }
+
+    .programs {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .assisstance {
+        padding: 12px;
+    }
+
+    .assisstance img {
+        height: auto;
+        max-height: 200px;
+    }
+
+    .assisstance h1 {
+        font-size: clamp(1.125rem, 3vw, 1.5rem);
+    }
+
+    .burial div,
+    .educational div,
+    .medical div,
+    .employment div,
+    .transport div {
+        width: 100%;
+        max-width: 100%;
+        padding: 16px 12px;
+    }
+
+    .burial h2,
+    .educational h2,
+    .medical h2,
+    .employment h2,
+    .transport h2 {
+        font-size: clamp(1.25rem, 4vw, 1.75rem);
+    }
+
+    .burial label,
+    .educational label,
+    .medical label,
+    .employment label,
+    .transport label {
+        font-size: var(--text-sm);
+    }
+
+    .burial input,
+    .burial select,
+    .educational input,
+    .educational select,
+    .medical input,
+    .medical select,
+    .employment input,
+    .employment select,
+    .transport input,
+    .transport select {
+        font-size: var(--text-base);
+        padding: 10px 14px;
+    }
+
+    .burial button,
+    .educational button,
+    .medical button,
+    .employment button,
+    .transport button {
+        font-size: var(--text-base);
+        padding: 12px 24px;
+        width: 100%;
+    }
+
+    .trackmdiv {
+        padding: 24px 16px;
+    }
+
+    .trackmdiv form {
+        width: 100%;
+        max-width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px 12px;
+    }
+
+    .trackmdiv form label {
+        width: 100%;
+    }
+
+    .trackmdiv form input {
+        width: 100%;
+    }
+
+    .trackmdiv button {
+        width: 100%;
+    }
+    
+    .trackmdiv .error-message {
+        position: static;
+    }
+    
+    .track-intro h2 {
+        font-size: 1.5rem;
+    }
+
+    .results {
+        width: 100%;
+        max-width: 100%;
+        padding: 16px 12px;
+    }
+
+    .results h2 {
+        font-size: clamp(1.125rem, 4vw, 1.5rem);
+    }
+
+    /* Table responsive - Stacked layout */
+    .applications-table {
+        border: none;
+        background: transparent;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        margin-bottom: 24px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(16px);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 50% !important;
+        text-align: right !important;
+        margin-bottom: 12px;
+        min-height: 32px;
+    }
+
+    td:last-child {
+        margin-bottom: 0;
+    }
+
+    td:before {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 900;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.4);
+        content: attr(data-label);
+    }
+
+    .btn {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+        display: block;
+        text-align: center;
+    }
+
+    /* Search form responsive */
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-form input {
+        width: 100%;
+    }
+
+    .search-form button {
+        width: 100%;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px 12px;
+    }
+
+    .logo img {
+        max-height: 45px;
+    }
+
+    .logo h1 {
+        font-size: 1rem;
+    }
+
+    .navbar h1 {
+        font-size: 0.875rem;
+    }
+
+    .trackbtn {
+        min-width: 90px;
+        font-size: var(--text-xs);
+        padding: 8px 12px;
+    }
+
+    .mdiv {
+        padding: 16px 12px;
+        gap: 16px;
+    }
+
+    .welcome {
+        padding: 20px 16px;
+    }
+
+    .welcome h1 {
+        font-size: clamp(1.25rem, 6vw, 1.75rem);
+        margin-bottom: 10px;
+    }
+
+    .welcome p {
+        font-size: 0.875rem;
+    }
+
+    .programs {
+        gap: 12px;
+    }
+
+    .assisstance {
+        padding: 16px;
+    }
+
+    .assisstance img {
+        max-height: 180px;
+    }
+
+    .assisstance h1 {
+        font-size: 1rem;
+        margin: 12px 6px 8px;
+    }
+
+    .burial div,
+    .educational div,
+    .medical div,
+    .employment div,
+    .transport div {
+        padding: 20px 16px;
+    }
+
+    .burial h2,
+    .educational h2,
+    .medical h2,
+    .employment h2,
+    .transport h2 {
+        font-size: clamp(1.125rem, 5vw, 1.5rem);
+        margin-bottom: 16px;
+    }
+
+    .burial label,
+    .educational label,
+    .medical label,
+    .employment label,
+    .transport label {
+        font-size: var(--text-sm);
+        margin-bottom: 6px;
+    }
+
+    .burial input,
+    .burial select,
+    .educational input,
+    .educational select,
+    .medical input,
+    .medical select,
+    .employment input,
+    .employment select,
+    .transport input,
+    .transport select {
+        font-size: var(--text-sm);
+        padding: 10px 12px;
+    }
+
+    .burial button,
+    .educational button,
+    .medical button,
+    .employment button,
+    .transport button {
+        font-size: var(--text-sm);
+        padding: 12px 20px;
+    }
+
+    .trackmdiv {
+        padding: 20px 12px;
+    }
+
+    .trackmdiv form {
+        padding: 16px;
+    }
+
+    .trackmdiv label {
+        font-size: var(--text-sm);
+    }
+
+    .trackmdiv input {
+        font-size: var(--text-sm);
+        padding: 10px 12px;
+    }
+
+    .trackmdiv button {
+        font-size: var(--text-sm);
+        padding: 12px 20px;
+    }
+
+    .results {
+        padding: 20px 16px;
+    }
+
+    .results h2 {
+        font-size: clamp(1rem, 5vw, 1.25rem);
+        margin-bottom: 16px;
+    }
+
+    /* Table adjustments for small screens */
+    table {
+        font-size: 0.75rem;
+    }
+
+    th, td {
+        padding: 8px 10px;
+    }
+
+    .btn {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+}
