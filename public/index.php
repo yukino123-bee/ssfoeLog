@@ -38,7 +38,13 @@ $routes = require_once ROOT_PATH . '/routes/web.php';
 $script_name = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
 $base_path = rtrim(dirname($script_name), '/');
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$path = substr($request_uri, strlen($base_path));
+
+if (strpos($request_uri, $base_path) === 0) {
+    $path = substr($request_uri, strlen($base_path));
+} else {
+    // Handled by .htaccess rewrite where REQUEST_URI doesn't include the base_path
+    $path = $request_uri;
+}
 
 // Ensure path starts with /
 if (!$path || $path[0] !== '/') {
