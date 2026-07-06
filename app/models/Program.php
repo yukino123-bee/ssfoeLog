@@ -171,8 +171,16 @@ class Program {
      */
     public function getStats($programName = null) {
         if ($programName) {
-            // Map program names to internal request types (e.g., 'Burial Assistance' -> 'burial')
-            $internalTypeName = strtolower(strtok($programName, ' '));
+            // Map program names to internal request types
+            $lowerName = strtolower($programName);
+            $internalTypeName = '';
+            if (strpos($lowerName, 'educational') !== false) $internalTypeName = 'educational';
+            elseif (strpos($lowerName, 'medical') !== false) $internalTypeName = 'medical';
+            elseif (strpos($lowerName, 'burial') !== false) $internalTypeName = 'burial';
+            elseif (strpos($lowerName, 'employment') !== false) $internalTypeName = 'employment';
+            elseif (strpos($lowerName, 'transportation') !== false) $internalTypeName = 'transportation';
+            else $internalTypeName = strtolower(strtok($programName, ' '));
+
             
             $sql = "SELECT
                         COUNT(*) as stats_total,
@@ -275,6 +283,15 @@ class Program {
      * Get program requests
      */
     public function getRequests($programName, $filters = []) {
+        $lowerName = strtolower($programName);
+        $internalTypeName = '';
+        if (strpos($lowerName, 'educational') !== false) $internalTypeName = 'educational';
+        elseif (strpos($lowerName, 'medical') !== false) $internalTypeName = 'medical';
+        elseif (strpos($lowerName, 'burial') !== false) $internalTypeName = 'burial';
+        elseif (strpos($lowerName, 'employment') !== false) $internalTypeName = 'employment';
+        elseif (strpos($lowerName, 'transportation') !== false) $internalTypeName = 'transportation';
+        else $internalTypeName = strtolower(strtok($programName, ' '));
+
         $sql = "SELECT r.*,
                 CASE
                     WHEN r.request_type = 'educational' THEN (SELECT school FROM req_educational WHERE request_id = r.id LIMIT 1)
@@ -285,7 +302,7 @@ class Program {
             FROM requests r
             WHERE r.request_type = ?";
 
-        $params = [$programName];
+        $params = [$internalTypeName];
         $types = "s";
 
         if (isset($filters['status'])) {

@@ -138,6 +138,14 @@ class RequestController {
                         $_SESSION['error_message'] = "Failed to upload $key.";
                         redirect(base_url('client/' . $request_type));
                     }
+                } elseif ($file['error'] !== UPLOAD_ERR_NO_FILE) {
+                    $errorMsg = "File upload error for $key.";
+                    if ($file['error'] === UPLOAD_ERR_INI_SIZE) {
+                        $maxSizeStr = ini_get('upload_max_filesize');
+                        $errorMsg = "The uploaded file for $key exceeds the maximum allowed size ($maxSizeStr). Please upload a smaller file.";
+                    }
+                    $_SESSION['error_message'] = $errorMsg;
+                    redirect(base_url('client/' . $request_type));
                 }
             }
 

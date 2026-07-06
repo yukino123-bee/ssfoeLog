@@ -174,7 +174,7 @@ $detail_files = array_values(array_filter($detail_rows, fn($r) => ($r['type'] ??
                     <i class="fas fa-bolt text-indigo-500"></i> Action Panel
                 </h3>
                 
-                <form method="POST" action="<?php echo base_url('admin/permissions/update'); ?>" class="space-y-6">
+                <form method="POST" action="<?php echo base_url('admin/requests/update'); ?>" class="space-y-6">
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars((string) ($request['id'] ?? '')); ?>">
                     <input type="hidden" name="from" value="request">
                     <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
@@ -279,7 +279,7 @@ $detail_files = array_values(array_filter($detail_rows, fn($r) => ($r['type'] ??
 <script>
 (function () {
     var csrfToken = <?php echo json_encode(generate_csrf_token(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
-    var updateUrl = <?php echo json_encode(base_url('admin/permissions/update'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+    var updateUrl = <?php echo json_encode(base_url('admin/requests/update'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
     function appendHidden(form, name, value) {
         var el = document.createElement('input');

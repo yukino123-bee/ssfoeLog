@@ -192,13 +192,9 @@ class Request {
         return $master;
     }
 
-    /**
-     * Check if a client already has an active (pending/approved) request for the same program.
-     * Prevents duplicate conflicting submissions.
-     */
     public function hasDuplicateActiveRequest($user_id, $request_type) {
         $stmt = $this->db->prepare(
-            "SELECT id FROM requests WHERE user_id = ? AND request_type = ? AND status IN ('pending', 'approved') LIMIT 1"
+            "SELECT id FROM requests WHERE user_id = ? AND request_type = ? AND status = 'pending' LIMIT 1"
         );
         $stmt->bind_param("is", $user_id, $request_type);
         $stmt->execute();
@@ -390,7 +386,7 @@ class Request {
 
     public function hasDuplicateActiveRequestByEmail($email, $request_type) {
         // Check for duplicate active requests by email
-        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM requests WHERE email = ? AND request_type = ? AND status IN ('pending', 'approved')");
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM requests WHERE email = ? AND request_type = ? AND status = 'pending'");
         $stmt->bind_param("ss", $email, $request_type);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();

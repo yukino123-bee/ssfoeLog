@@ -12,6 +12,7 @@ return [
     '/admin/dashboard' => ['handler' => 'AdminController@dashboard', 'middleware' => ['admin_only']],
     '/admin/requests' => ['handler' => 'AdminController@requests', 'middleware' => ['admin_only']],
     '/admin/requests/view' => ['handler' => 'AdminController@viewRequest', 'middleware' => ['admin_only']],
+    '/admin/requests/update' => ['handler' => 'AdminController@updateStatus', 'middleware' => ['admin_only', 'csrf']],
     '/admin/programs' => ['handler' => 'AdminController@programs', 'middleware' => ['admin_only']],
     '/admin/programs/create' => ['handler' => 'AdminController@createProgram', 'middleware' => ['admin_only', 'csrf']],
     '/admin/programs/edit' => ['handler' => 'AdminController@editProgram', 'middleware' => ['admin_only']],
