@@ -21,6 +21,14 @@ class Request {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getByFullnameOrPhone($identifier) {
+        $searchTerm = "%$identifier%";
+        $stmt = $this->db->prepare("SELECT * FROM requests WHERE fullname LIKE ? OR details LIKE ? ORDER BY created_at DESC");
+        $stmt->bind_param("ss", $searchTerm, $searchTerm);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getByReferenceNumber($ref) {
         $stmt = $this->db->prepare("SELECT * FROM requests WHERE reference_number = ? ORDER BY created_at DESC");
         $stmt->bind_param("s", $ref);

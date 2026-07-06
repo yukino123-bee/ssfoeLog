@@ -14,18 +14,18 @@ class RequestController {
         require_once APP_PATH . '/models/Request.php';
         $requestModel = new Request();
         
-        $reference_number = '';
+        $identifier = '';
         $requests = [];
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $reference_number = trim($_POST['reference_number'] ?? '');
-            if (!empty($reference_number)) {
-                $requests = $requestModel->getByReferenceNumber($reference_number);
+            $identifier = trim($_POST['identifier'] ?? '');
+            if (!empty($identifier)) {
+                $requests = $requestModel->getByFullnameOrPhone($identifier);
             }
-        } elseif (isset($_GET['reference_number'])) {
-            $reference_number = trim($_GET['reference_number']);
-            if (!empty($reference_number)) {
-                $requests = $requestModel->getByReferenceNumber($reference_number);
+        } elseif (isset($_GET['identifier'])) {
+            $identifier = trim($_GET['identifier']);
+            if (!empty($identifier)) {
+                $requests = $requestModel->getByFullnameOrPhone($identifier);
             }
         }
         
