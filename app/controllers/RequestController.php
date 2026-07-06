@@ -20,12 +20,12 @@ class RequestController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $identifier = trim($_POST['identifier'] ?? '');
             if (!empty($identifier)) {
-                $requests = $requestModel->getByFullnameOrPhone($identifier);
+                $requests = $requestModel->getByIdentifier($identifier);
             }
         } elseif (isset($_GET['identifier'])) {
             $identifier = trim($_GET['identifier']);
             if (!empty($identifier)) {
-                $requests = $requestModel->getByFullnameOrPhone($identifier);
+                $requests = $requestModel->getByIdentifier($identifier);
             }
         }
         

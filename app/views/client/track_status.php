@@ -20,7 +20,7 @@ require_once APP_PATH . '/views/layouts/header.php';
                     Track Your <span class="text-transparent" style="-webkit-text-stroke: 1px #111111;">Request</span>
                 </h1>
                 <p class="text-lg font-bold opacity-60">
-                    Enter your Full Name or Phone Number to check your status and view your history.
+                    Enter your Email, Full Name, or Phone Number to check your status and view your history.
                 </p>
             </div>
 
@@ -32,7 +32,7 @@ require_once APP_PATH . '/views/layouts/header.php';
                     </div>
                     <form id="track-form" method="POST" action="" class="flex flex-col md:flex-row items-stretch gap-4">
                         <input type="text" name="identifier" required 
-                               placeholder="FULL NAME OR PHONE NUMBER" 
+                               placeholder="EMAIL, FULL NAME, OR PHONE NUMBER" 
                                class="flex-1 bg-white px-6 py-4 md:px-8 md:py-6 text-[11px] font-black uppercase tracking-widest focus:outline-none border-l-4 border-transparent focus:border-optimum-red transition-all text-optimum-dark placeholder:text-slate-400">
                         <button type="submit" 
                                 class="px-8 py-4 md:px-12 md:py-6 bg-optimum-dark text-white font-black uppercase tracking-[0.2em] hover:bg-optimum-red transition-colors whitespace-nowrap shadow-lg">
@@ -64,9 +64,9 @@ require_once APP_PATH . '/views/layouts/header.php';
                         </thead>
                         <tbody class="divide-y divide-white/5">
                             <?php if (empty($requests) && !empty($identifier)): ?>
-                                <tr><td colspan="4" class="px-8 py-6 text-center text-slate-500">No applications found for this name or phone number.</td></tr>
+                                <tr><td colspan="4" class="px-8 py-6 text-center text-slate-500">No applications found for this email, name, or phone number.</td></tr>
                             <?php elseif (empty($requests)): ?>
-                                <tr><td colspan="4" class="px-8 py-6 text-center text-slate-500">Enter your full name or phone number above to track your requests.</td></tr>
+                                <tr><td colspan="4" class="px-8 py-6 text-center text-slate-500">Enter your email, full name, or phone number above to track your requests.</td></tr>
                             <?php else: ?>
                             <?php foreach ($requests as $req): 
                                 $icon = '📄';

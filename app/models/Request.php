@@ -21,10 +21,10 @@ class Request {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getByFullnameOrPhone($identifier) {
+    public function getByIdentifier($identifier) {
         $searchTerm = "%$identifier%";
-        $stmt = $this->db->prepare("SELECT * FROM requests WHERE fullname LIKE ? OR details LIKE ? ORDER BY created_at DESC");
-        $stmt->bind_param("ss", $searchTerm, $searchTerm);
+        $stmt = $this->db->prepare("SELECT * FROM requests WHERE fullname LIKE ? OR email LIKE ? OR details LIKE ? ORDER BY created_at DESC");
+        $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
