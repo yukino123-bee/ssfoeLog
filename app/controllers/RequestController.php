@@ -167,9 +167,9 @@ class RequestController {
             }
             $_SESSION['error_message'] = "There was an error processing your request. Please try again.";
             redirect(base_url('client/' . $request_type));
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             error_log("Error in RequestController::submit: " . $e->getMessage(), 3, ROOT_PATH . '/storage/logs/error.log');
-            $_SESSION['error_message'] = "An unexpected error occurred. Please try again.";
+            $_SESSION['error_message'] = "System Error: " . $e->getMessage();
             redirect(base_url('client/' . ($request_type ?? 'educational')));
         }
     }
