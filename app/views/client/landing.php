@@ -7,6 +7,33 @@ require_once APP_PATH . '/views/layouts/header.php';
 ?>
     <?php require_once APP_PATH . '/views/layouts/client_navbar.php'; ?>
 
+    <!-- Announcements Banner -->
+    <?php if (!empty($announcements)): ?>
+    <section class="bg-rose-50 border-y border-rose-100 py-6 relative z-10">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                <div class="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center text-rose-600 shadow-sm border border-rose-100">
+                    <i class="fas fa-bullhorn text-xl"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-sm font-bold text-gray-900 mb-1">Important Announcements</h3>
+                    <div class="space-y-2 mt-2">
+                        <?php foreach ($announcements as $ann): ?>
+                            <?php if($ann['audience'] === 'All Beneficiaries'): ?>
+                            <div class="bg-white px-4 py-3 rounded-lg border border-rose-100 shadow-sm text-sm">
+                                <span class="font-bold text-gray-900 mr-2"><?php echo htmlspecialchars($ann['title']); ?>:</span>
+                                <span class="text-gray-600"><?php echo htmlspecialchars($ann['content']); ?></span>
+                                <span class="text-xs text-gray-400 ml-2 block sm:inline mt-1 sm:mt-0"><?php echo date('M d, Y', strtotime($ann['created_at'])); ?></span>
+                            </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+
     <!-- Main Content -->
     <main class="flex-grow">
         <!-- Hero Section -->

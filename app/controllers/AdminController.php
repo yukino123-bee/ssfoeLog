@@ -763,5 +763,84 @@ class AdminController {
         redirect(base_url('admin/profile'));
     }
 
+    public function notifications() {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+        
+        require_once APP_PATH . '/models/Notification.php';
+        $notificationModel = new Notification();
+        $adminId = $_SESSION['user_id'] ?? 0;
+        
+        // Mark all as read if requested
+        if (isset($_POST['mark_all_read']) && $_POST['mark_all_read'] == '1') {
+            $notificationModel->markAllAsRead($adminId);
+            redirect(base_url('admin/notifications'));
+        }
+        
+        $notificationsRes = $notificationModel->getByUser($adminId);
+        $notifications = [];
+        if ($notificationsRes) {
+            while ($row = $notificationsRes->fetch_assoc()) {
+                $notifications[] = $row;
+            }
+        }
+        
+        $title = "Notifications - " . APP_NAME;
+        require_once APP_PATH . '/views/admin/notifications.php'; // We might need to create this view
+    }
+
+    public function notificationsAjax() {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+        
+        header('Content-Type: application/json');
+        
+        require_once APP_PATH . '/models/Notification.php';
+        $notificationModel = new Notification();
+        $adminId = $_SESSION['user_id'] ?? 0;
+        
+        $unreadCount = $notificationModel->getUnreadCount($adminId);
+        $notificationsRes = $notificationModel->getByUser($adminId);
+        
+        $notifications = [];
+        if ($notificationsRes) {
+            $count = 0;
+            while ($row = $notificationsRes->fetch_assoc()) {
+                if ($count >= 10) break; // Only send top 10 for dropdown
+                // Format time difference
+                $time = date('M d, g:i A', strtotime($row['created_at']));
+                $row['time'] = $time;
+                $notifications[] = $row;
+                $count++;
+            }
+        }
+        
+        echo json_encode([
+            'status' => 'success',
+            'unreadCount' => $unreadCount,
+            'notifications' => $notifications
+        ]);
+        exit;
+    }
+
+    public function markNotificationRead() {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+        
+        $id = $_POST['id'] ?? 0;
+        if ($id) {
+            require_once APP_PATH . '/models/Notification.php';
+            $notificationModel = new Notification();
+            $notificationModel->markAsRead($id);
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error']);
+        }
+        exit;
+    }
+
 }
 

@@ -26,6 +26,17 @@ return [
     '/admin/profile' => ['handler' => 'AdminController@profile', 'middleware' => ['admin_only']],
     '/admin/profile/update' => ['handler' => 'AdminController@updateProfile', 'middleware' => ['admin_only', 'csrf']],
 
+    // Announcements
+    '/admin/announcements' => ['handler' => 'AdminController@announcements', 'middleware' => ['admin_only']],
+    '/admin/announcements/edit' => ['handler' => 'AdminController@editAnnouncement', 'middleware' => ['admin_only']],
+    '/admin/announcements/update' => ['handler' => 'AdminController@updateAnnouncement', 'middleware' => ['admin_only', 'csrf']],
+    '/admin/announcements/delete' => ['handler' => 'AdminController@announcements', 'middleware' => ['admin_only', 'csrf']],
+
+    // Notifications
+    '/admin/notifications' => ['handler' => 'AdminController@notifications', 'middleware' => ['admin_only']],
+    '/admin/notifications/ajax' => ['handler' => 'AdminController@notificationsAjax', 'middleware' => ['admin_only']],
+    '/admin/notifications/read' => ['handler' => 'AdminController@markNotificationRead', 'middleware' => ['admin_only', 'csrf']],
+
     // Client routes
     '/client' => ['handler' => 'RequestController@landing', 'middleware' => []],
     '/client/track' => ['handler' => 'RequestController@track', 'middleware' => []],

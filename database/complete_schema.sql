@@ -281,6 +281,35 @@ TOTAL: 11 tables
 */
 
 -- ============================================================================
+-- SECTION 5: NEW FEATURES
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    priority ENUM('Normal', 'High', 'Urgent') DEFAULT 'Normal',
+    audience ENUM('All Beneficiaries', 'Approved Applicants', 'Pending Review') DEFAULT 'All Beneficiaries',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_priority (priority),
+    INDEX idx_created (created_at DESC)
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NULL,
+    message VARCHAR(255) NOT NULL,
+    link VARCHAR(255) NULL,
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user (user_id),
+    INDEX idx_is_read (is_read),
+    INDEX idx_created (created_at DESC)
+);
+
+-- ============================================================================
 -- VERIFICATION QUERY
 -- ============================================================================
 SHOW TABLES;

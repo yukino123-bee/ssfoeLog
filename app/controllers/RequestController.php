@@ -6,6 +6,10 @@
 class RequestController {
 
     public function landing() {
+        require_once APP_PATH . '/models/Announcement.php';
+        $announcementModel = new Announcement();
+        $announcements = $announcementModel->getAll(5); // Fetch top 5 recent announcements
+        
         $title = "SSFO eLog - Get Started";
         require_once APP_PATH . '/views/client/landing.php';
     }
