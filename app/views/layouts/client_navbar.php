@@ -30,6 +30,96 @@
                 Contact Us
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-optimum-red transition-all group-hover:w-full"></span>
             </a>
+
+            <!-- Notification Bell -->
+            <div class="relative flex items-center">
+                <button id="client-notification-bell" class="w-9 h-9 flex items-center justify-center relative text-optimum-dark hover:text-optimum-red transition-all group">
+                    <i class="fas fa-bell text-lg"></i>
+                    <span id="client-notification-badge" class="absolute top-1 right-1 w-2 h-2 bg-optimum-red rounded-full border-2 border-white group-hover:scale-125 transition-transform hidden"></span>
+                </button>
+
+                <!-- Notifications Dropdown -->
+                <div id="client-notification-dropdown" class="absolute right-0 top-12 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden hidden animate-in fade-in slide-in-from-top-4 duration-200 z-[100]">
+                    <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-white">
+                        <h3 class="text-xs font-bold text-gray-900 uppercase tracking-widest">Announcements</h3>
+                    </div>
+                    <div id="client-notification-items" class="max-h-[350px] overflow-y-auto divide-y divide-gray-50">
+                        <!-- Items populated via JS -->
+                        <div class="p-8 text-center">
+                            <i class="fas fa-circle-notch fa-spin text-gray-300 text-xl mb-2"></i>
+                            <p class="text-xs font-medium text-gray-400">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const bell = document.getElementById('client-notification-bell');
+                const dropdown = document.getElementById('client-notification-dropdown');
+                const badge = document.getElementById('client-notification-badge');
+                const itemsContainer = document.getElementById('client-notification-items');
+
+                function fetchClientNotifications() {
+                    fetch('<?php echo base_url('client/announcements/ajax'); ?>')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                // Update items
+                                if (data.notifications.length === 0) {
+                                    itemsContainer.innerHTML = `
+                                        <div class="p-10 text-center">
+                                            <p class="text-xs font-bold text-gray-400 italic">No announcements yet</p>
+                                        </div>
+                                    `;
+                                    badge.classList.add('hidden');
+                                } else {
+                                    badge.classList.remove('hidden'); // Show badge if there are announcements
+                                    itemsContainer.innerHTML = data.notifications.map(n => `
+                                        <div class="p-4 hover:bg-gray-50 transition-colors cursor-default group">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center text-xs shrink-0">
+                                                    <i class="fas fa-bullhorn"></i>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-0.5">${n.title}</p>
+                                                    <p class="text-xs font-medium text-gray-700 leading-tight mb-1">${n.content}</p>
+                                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">${n.time}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('');
+                                }
+                            }
+                        });
+                }
+
+                // Initial fetch
+                fetchClientNotifications();
+
+                // Toggle dropdown
+                if(bell) {
+                    bell.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        dropdown.classList.toggle('hidden');
+                        if (!dropdown.classList.contains('hidden')) {
+                            fetchClientNotifications();
+                        }
+                    });
+                }
+
+                // Close dropdown on click outside
+                document.addEventListener('click', function() {
+                    if(dropdown) dropdown.classList.add('hidden');
+                });
+
+                if(dropdown) {
+                    dropdown.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                }
+            });
+            </script>
         </div>
     </div>
 </nav>

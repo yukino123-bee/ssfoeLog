@@ -203,4 +203,36 @@ class RequestController {
         $title = "Proof of Approval - #" . str_pad($id, 6, '0', STR_PAD_LEFT);
         require_once APP_PATH . '/views/client/proof_of_approval.php';
     }
+
+    public function announcementsAjax() {
+        header('Content-Type: application/json');
+        
+        require_once APP_PATH . '/models/Announcement.php';
+        $announcementModel = new Announcement();
+        $announcementsRes = $announcementModel->getAll(10); // Fetch top 10
+        
+        $announcements = [];
+        $unreadCount = 0; // We can't really track unread for anonymous users, but we can show recent ones
+        
+        if ($announcementsRes) {
+            foreach ($announcementsRes as $row) {
+                if ($row['audience'] === 'All Beneficiaries') {
+                    $time = date('M d, g:i A', strtotime($row['created_at']));
+                    $row['time'] = $time;
+                    $row['is_read'] = 1; // Mark read so they don't look unread, or 0 if we want them highlighted
+                    $announcements[] = $row;
+                }
+            }
+        }
+        
+        // Let's just say there are 0 "unread" badge notifications for anonymous, or we can highlight all of them.
+        // We'll leave unreadCount 0 so the red badge doesn't stay permanently for anonymous users.
+        
+        echo json_encode([
+            'status' => 'success',
+            'unreadCount' => 0,
+            'notifications' => $announcements
+        ]);
+        exit;
+    }
 }
