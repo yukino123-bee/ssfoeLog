@@ -842,5 +842,42 @@ class AdminController {
         exit;
     }
 
+    public function inquiries() {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+        
+        require_once APP_PATH . '/models/Inquiry.php';
+        $inquiryModel = new Inquiry();
+        
+        // Mark all as read if requested
+        if (isset($_POST['mark_all_read']) && $_POST['mark_all_read'] == '1') {
+            $inquiryModel->markAllAsRead();
+            redirect(base_url('admin/inquiries'));
+        }
+        
+        $inquiries = $inquiryModel->getAll();
+        
+        $title = "Inbox - " . APP_NAME;
+        require_once APP_PATH . '/views/admin/inquiries.php';
+    }
+
+    public function markInquiryRead() {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+        
+        $id = $_POST['id'] ?? 0;
+        if ($id) {
+            require_once APP_PATH . '/models/Inquiry.php';
+            $inquiryModel = new Inquiry();
+            $inquiryModel->markAsRead($id);
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error']);
+        }
+        exit;
+    }
+
 }
 

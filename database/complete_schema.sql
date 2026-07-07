@@ -309,6 +309,18 @@ CREATE TABLE IF NOT EXISTS notifications (
     INDEX idx_created (created_at DESC)
 );
 
+CREATE TABLE IF NOT EXISTS inquiries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    subject VARCHAR(255),
+    message TEXT NOT NULL,
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_created (created_at DESC),
+    INDEX idx_is_read (is_read)
+);
+
 -- ============================================================================
 -- VERIFICATION QUERY
 -- ============================================================================

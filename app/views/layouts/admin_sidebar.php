@@ -62,6 +62,10 @@
                     <i class="fas fa-bullhorn text-base opacity-80 group-hover:opacity-100 transition-opacity"></i>
                     <span class="text-sm">Announcements</span>
                 </a>
+                <a href="<?php echo base_url('admin/inquiries'); ?>" class="<?php echo nav_class('inquiries', $uri); ?>">
+                    <i class="fas fa-inbox text-base opacity-80 group-hover:opacity-100 transition-opacity"></i>
+                    <span class="text-sm">Inbox</span>
+                </a>
             </div>
         </div>
 

@@ -235,4 +235,38 @@ class RequestController {
         ]);
         exit;
     }
+
+    public function submitContact() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            redirect(base_url('client#contact'));
+        }
+
+        require_once APP_PATH . '/models/Inquiry.php';
+        $inquiryModel = new Inquiry();
+
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $subject = trim($_POST['subject'] ?? '');
+        $message = trim($_POST['message'] ?? '');
+
+        if (empty($name) || empty($email) || empty($message)) {
+            $_SESSION['error_message'] = "Please fill in all required fields.";
+            redirect(base_url('client#contact'));
+        }
+
+        $data = [
+            'name' => $name,
+            'email' => $email,
+            'subject' => $subject,
+            'message' => $message
+        ];
+
+        if ($inquiryModel->create($data)) {
+            $_SESSION['success_message'] = "Your message has been sent successfully. We will get back to you soon!";
+        } else {
+            $_SESSION['error_message'] = "Failed to send your message. Please try again later.";
+        }
+
+        redirect(base_url('client#contact'));
+    }
 }

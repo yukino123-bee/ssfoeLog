@@ -37,10 +37,15 @@ return [
     '/admin/notifications/ajax' => ['handler' => 'AdminController@notificationsAjax', 'middleware' => ['admin_only']],
     '/admin/notifications/read' => ['handler' => 'AdminController@markNotificationRead', 'middleware' => ['admin_only', 'csrf']],
 
+    // Inquiries / Inbox
+    '/admin/inquiries' => ['handler' => 'AdminController@inquiries', 'middleware' => ['admin_only']],
+    '/admin/inquiries/read' => ['handler' => 'AdminController@markInquiryRead', 'middleware' => ['admin_only', 'csrf']],
+
     // Client routes
     '/client' => ['handler' => 'RequestController@landing', 'middleware' => []],
     '/client/track' => ['handler' => 'RequestController@track', 'middleware' => []],
     '/client/submit' => ['handler' => 'RequestController@submit', 'middleware' => ['csrf']],
+    '/client/contact/submit' => ['handler' => 'RequestController@submitContact', 'middleware' => ['csrf']],
     '/client/educational' => ['handler' => 'RequestController@educational', 'middleware' => []],
     '/client/medical' => ['handler' => 'RequestController@medical', 'middleware' => []],
     '/client/burial' => ['handler' => 'RequestController@burial', 'middleware' => []],
