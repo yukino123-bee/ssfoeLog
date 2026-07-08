@@ -20,6 +20,7 @@
         <div class="lg:col-span-2">
             <div class="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
                 <form method="POST" action="<?php echo base_url('admin/programs/update'); ?>" class="space-y-6">
+                    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                     <input type="hidden" name="id" value="<?php echo (int)($program['id'] ?? 0); ?>">
 
                     <div>
@@ -88,6 +89,7 @@
 
                 <div class="mt-6 pt-6 border-t border-gray-100">
                     <form method="POST" action="<?php echo base_url('admin/programs/delete'); ?>" onsubmit="return confirm('Are you sure you want to delete this program? This action cannot be undone.');">
+                        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <input type="hidden" name="id" value="<?php echo (int)($program['id'] ?? 0); ?>">
                         <button type="submit" class="w-full rounded-xl bg-red-50 py-2.5 text-sm font-semibold text-red-800 border border-red-200 hover:bg-red-100 transition">
                             <i class="fas fa-trash mr-2"></i> Delete Program

@@ -30,6 +30,7 @@
                             <i class="fas fa-edit"></i>
                         </a>
                         <form method="POST" action="<?php echo base_url('admin/programs/delete'); ?>" class="inline" onsubmit="return confirm('Are you sure you want to delete this program?');">
+                            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                             <input type="hidden" name="id" value="<?php echo (int)$program['id']; ?>">
                             <button type="submit" class="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition" title="Delete">
                                 <i class="fas fa-trash"></i>
@@ -113,6 +114,7 @@
             </button>
         </div>
         <form method="POST" action="<?php echo base_url('admin/programs/create'); ?>" class="p-5 space-y-4">
+            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
             <div>
                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Program name</label>
                 <input type="text" name="name" required placeholder="E.g., Scholarship Program" class="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm text-gray-900 focus:border-rose-300 focus:ring-2 focus:ring-rose-500/20 outline-none">
