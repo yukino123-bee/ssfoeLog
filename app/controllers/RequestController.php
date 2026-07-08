@@ -37,6 +37,29 @@ class RequestController {
         require_once APP_PATH . '/views/client/track_status.php';
     }
 
+    public function viewDetails() {
+        require_once APP_PATH . '/models/Request.php';
+        $requestModel = new Request();
+        
+        $email = '';
+        $category = '';
+        $requests = [];
+        $searched = false;
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = trim($_POST['email'] ?? '');
+            $category = trim($_POST['category'] ?? '');
+            
+            if (!empty($email) && !empty($category)) {
+                $requests = $requestModel->getByEmailAndTypeWithDetails($email, $category);
+                $searched = true;
+            }
+        }
+        
+        $title = "View Request Details";
+        require_once APP_PATH . '/views/client/view_details.php';
+    }
+
     public function educational() {
         $title = "Educational Assistance";
         $request_type = "educational";

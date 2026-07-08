@@ -26,6 +26,10 @@
                 Track Status
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-optimum-red transition-all group-hover:w-full"></span>
             </a>
+            <a href="<?php echo base_url('client/details'); ?>" class="text-[13px] font-black text-optimum-dark hover:text-optimum-red transition-all tracking-tight uppercase relative group">
+                View Details
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-optimum-red transition-all group-hover:w-full"></span>
+            </a>
             <a href="<?php echo base_url('client'); ?>#contact" class="text-[13px] font-black text-optimum-dark hover:text-optimum-red transition-all tracking-tight uppercase relative group">
                 Contact Us
                 <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-optimum-red transition-all group-hover:w-full"></span>

@@ -44,6 +44,7 @@ return [
     // Client routes
     '/client' => ['handler' => 'RequestController@landing', 'middleware' => []],
     '/client/track' => ['handler' => 'RequestController@track', 'middleware' => []],
+    '/client/details' => ['handler' => 'RequestController@viewDetails', 'middleware' => []],
     '/client/submit' => ['handler' => 'RequestController@submit', 'middleware' => ['csrf']],
     '/client/contact/submit' => ['handler' => 'RequestController@submitContact', 'middleware' => ['csrf']],
     '/client/educational' => ['handler' => 'RequestController@educational', 'middleware' => []],

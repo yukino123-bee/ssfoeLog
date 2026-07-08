@@ -21,6 +21,39 @@ class Request {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getByEmailAndTypeWithDetails($email, $type) {
+        $stmt = $this->db->prepare("SELECT * FROM requests WHERE email = ? AND request_type = ? ORDER BY created_at DESC");
+        $stmt->bind_param("ss", $email, $type);
+        $stmt->execute();
+        $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        
+        $allowedTypes = ['educational', 'medical', 'burial', 'employment', 'transportation'];
+        
+        foreach ($results as &$master) {
+            $table = "req_" . strtolower($master['request_type']);
+            if (in_array($master['request_type'], $allowedTypes)) {
+                $stmt_detail = $this->db->prepare("SELECT * FROM $table WHERE request_id = ?");
+                if ($stmt_detail) {
+                    $stmt_detail->bind_param("i", $master['id']);
+                    $stmt_detail->execute();
+                    $detail = $stmt_detail->get_result()->fetch_assoc();
+                    if ($detail) {
+                        unset($detail['id'], $detail['request_id']);
+                        $master['details'] = json_encode($detail);
+                    } else {
+                        $master['details'] = !empty($master['details']) ? $master['details'] : json_encode([]);
+                    }
+                } else {
+                    $master['details'] = !empty($master['details']) ? $master['details'] : json_encode([]);
+                }
+            } else {
+                $master['details'] = !empty($master['details']) ? $master['details'] : json_encode([]);
+            }
+        }
+        
+        return $results;
+    }
+
     public function getByIdentifier($identifier) {
         $searchTerm = "%$identifier%";
         $stmt = $this->db->prepare("SELECT * FROM requests WHERE fullname LIKE ? OR email LIKE ? OR details LIKE ? ORDER BY created_at DESC");
