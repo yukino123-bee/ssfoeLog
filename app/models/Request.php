@@ -22,7 +22,7 @@ class Request {
     }
 
     public function getByEmailAndTypeWithDetails($email, $type) {
-        $stmt = $this->db->prepare("SELECT * FROM requests WHERE email = ? AND request_type = ? ORDER BY created_at DESC");
+        $stmt = $this->db->prepare("SELECT * FROM requests WHERE LOWER(email) = LOWER(?) AND request_type = ? ORDER BY created_at DESC");
         $stmt->bind_param("ss", $email, $type);
         $stmt->execute();
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
