@@ -3,6 +3,10 @@
  * Announcement Model
  */
 
+// Allow this model to be loaded safely even when it is reached outside the
+// normal front-controller bootstrap sequence.
+require_once dirname(__DIR__) . '/config/database.php';
+
 class Announcement {
     protected $db;
 

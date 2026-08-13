@@ -8,6 +8,7 @@
     <div class="flex space-x-3">
         <form method="POST" action="<?php echo base_url('admin/inquiries'); ?>">
             <input type="hidden" name="mark_all_read" value="1">
+            <input type="hidden" name="csrf_token" value="<?php echo escape_output(generate_csrf_token(), 'attr'); ?>">
             <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50 hover:text-rose-600 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500">
                 <i class="fas fa-check-double mr-2"></i> Mark all as read
             </button>

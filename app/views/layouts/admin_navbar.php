@@ -47,6 +47,9 @@
                 const dropdown = document.getElementById('notification-dropdown');
                 const badge = document.getElementById('notification-badge');
                 const itemsContainer = document.getElementById('notification-items');
+                const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, character => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'
+                })[character]);
 
                 function fetchNotifications() {
                     fetch('<?php echo base_url('admin/notifications/ajax'); ?>')
@@ -70,19 +73,22 @@
                                     `;
                                 } else {
                                     itemsContainer.innerHTML = data.notifications.map(n => `
-                                        <div class="p-4 hover:bg-gray-50 transition-colors cursor-pointer group ${!n.is_read ? 'bg-rose-50/30' : ''}" onclick="markAsRead(${n.id}, '${n.link || ''}')">
+                                        <div class="notification-item p-4 hover:bg-gray-50 transition-colors cursor-pointer group ${!n.is_read ? 'bg-rose-50/30' : ''}" data-id="${Number(n.id) || 0}" data-link="${escapeHtml(n.link)}">
                                             <div class="flex items-start space-x-3">
                                                 <div class="w-8 h-8 rounded-lg ${n.is_read ? 'bg-gray-100 text-gray-400' : 'bg-optimum-red/10 text-optimum-red'} flex items-center justify-center text-xs shrink-0">
                                                     <i class="fas ${n.message.toLowerCase().includes('new') ? 'fa-file-invoice' : 'fa-bell'}"></i>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <p class="text-xs font-bold text-gray-800 leading-tight mb-1 ${!n.is_read ? 'font-black' : ''}">${n.message}</p>
-                                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">${n.time}</p>
+                                                    <p class="text-xs font-bold text-gray-800 leading-tight mb-1 ${!n.is_read ? 'font-black' : ''}">${escapeHtml(n.message)}</p>
+                                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">${escapeHtml(n.time)}</p>
                                                 </div>
                                                 ${!n.is_read ? '<div class="w-1.5 h-1.5 rounded-full bg-optimum-red mt-1"></div>' : ''}
                                             </div>
                                         </div>
                                     `).join('');
+                                    itemsContainer.querySelectorAll('.notification-item').forEach(item => {
+                                        item.addEventListener('click', () => markAsRead(Number(item.dataset.id), item.dataset.link));
+                                    });
                                 }
                             }
                         });

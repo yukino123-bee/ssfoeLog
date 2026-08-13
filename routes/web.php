@@ -5,8 +5,8 @@
 
 return [
     '/' => ['handler' => 'RequestController@landing', 'middleware' => []],
-    '/login' => ['handler' => 'AuthController@login', 'middleware' => ['csrf']],
-    '/logout' => ['handler' => 'AuthController@logout', 'middleware' => []],
+    '/login' => ['handler' => 'AuthController@login', 'middleware' => ['rate_limit', 'csrf']],
+    '/logout' => ['handler' => 'AuthController@logout', 'middleware' => ['csrf']],
 
     // Admin routes
     '/admin/dashboard' => ['handler' => 'AdminController@dashboard', 'middleware' => ['admin_only']],
@@ -33,20 +33,20 @@ return [
     '/admin/announcements/delete' => ['handler' => 'AdminController@announcements', 'middleware' => ['admin_only', 'csrf']],
 
     // Notifications
-    '/admin/notifications' => ['handler' => 'AdminController@notifications', 'middleware' => ['admin_only']],
+    '/admin/notifications' => ['handler' => 'AdminController@notifications', 'middleware' => ['admin_only', 'csrf']],
     '/admin/notifications/ajax' => ['handler' => 'AdminController@notificationsAjax', 'middleware' => ['admin_only']],
     '/admin/notifications/read' => ['handler' => 'AdminController@markNotificationRead', 'middleware' => ['admin_only', 'csrf']],
 
     // Inquiries / Inbox
-    '/admin/inquiries' => ['handler' => 'AdminController@inquiries', 'middleware' => ['admin_only']],
+    '/admin/inquiries' => ['handler' => 'AdminController@inquiries', 'middleware' => ['admin_only', 'csrf']],
     '/admin/inquiries/read' => ['handler' => 'AdminController@markInquiryRead', 'middleware' => ['admin_only', 'csrf']],
 
     // Client routes
     '/client' => ['handler' => 'RequestController@landing', 'middleware' => []],
-    '/client/track' => ['handler' => 'RequestController@track', 'middleware' => []],
-    '/client/details' => ['handler' => 'RequestController@viewDetails', 'middleware' => []],
-    '/client/submit' => ['handler' => 'RequestController@submit', 'middleware' => ['csrf']],
-    '/client/contact/submit' => ['handler' => 'RequestController@submitContact', 'middleware' => ['csrf']],
+    '/client/track' => ['handler' => 'RequestController@track', 'middleware' => ['rate_limit', 'csrf']],
+    '/client/details' => ['handler' => 'RequestController@viewDetails', 'middleware' => ['rate_limit', 'csrf']],
+    '/client/submit' => ['handler' => 'RequestController@submit', 'middleware' => ['rate_limit', 'csrf']],
+    '/client/contact/submit' => ['handler' => 'RequestController@submitContact', 'middleware' => ['rate_limit', 'csrf']],
     '/client/educational' => ['handler' => 'RequestController@educational', 'middleware' => []],
     '/client/medical' => ['handler' => 'RequestController@medical', 'middleware' => []],
     '/client/burial' => ['handler' => 'RequestController@burial', 'middleware' => []],

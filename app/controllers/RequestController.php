@@ -22,14 +22,15 @@ class RequestController {
         $requests = [];
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $identifier = trim($_POST['identifier'] ?? '');
-            if (!empty($identifier)) {
-                $requests = $requestModel->getByIdentifier($identifier);
+            $input = $_POST['identifier'] ?? '';
+            $identifier = is_string($input) ? strtoupper(trim($input)) : '';
+            if (preg_match('/^[A-F0-9]{10}$/', $identifier)) {
+                $requests = $requestModel->getByReferenceNumber($identifier);
             }
-        } elseif (isset($_GET['identifier'])) {
-            $identifier = trim($_GET['identifier']);
-            if (!empty($identifier)) {
-                $requests = $requestModel->getByIdentifier($identifier);
+        } elseif (isset($_GET['reference_number']) && is_string($_GET['reference_number'])) {
+            $identifier = strtoupper(trim($_GET['reference_number']));
+            if (preg_match('/^[A-F0-9]{10}$/', $identifier)) {
+                $requests = $requestModel->getByReferenceNumber($identifier);
             }
         }
         
@@ -42,16 +43,21 @@ class RequestController {
         $requestModel = new Request();
         
         $email = '';
+        $reference = '';
         $category = '';
         $requests = [];
         $searched = false;
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = trim($_POST['email'] ?? '');
-            $category = trim($_POST['category'] ?? '');
+            $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
+            $reference = is_string($_POST['reference'] ?? null) ? strtoupper(trim($_POST['reference'])) : '';
+            $category = is_string($_POST['category'] ?? null) ? trim($_POST['category']) : '';
+            $allowedCategories = ['educational', 'medical', 'burial', 'employment', 'transportation'];
             
-            if (!empty($email) && !empty($category)) {
-                $requests = $requestModel->getByEmailAndTypeWithDetails($email, $category);
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)
+                && preg_match('/^[A-F0-9]{10}$/', $reference)
+                && in_array($category, $allowedCategories, true)) {
+                $requests = $requestModel->getByEmailTypeAndReferenceWithDetails($email, $category, $reference);
                 $searched = true;
             }
         }
@@ -99,12 +105,18 @@ class RequestController {
             require_once APP_PATH . '/models/Request.php';
             $requestModel = new Request();
 
-            $firstname = trim($_POST['firstname'] ?? '');
-            $middlename = trim($_POST['middlename'] ?? '');
-            $lastname = trim($_POST['lastname'] ?? '');
+            $firstname = is_string($_POST['firstname'] ?? null) ? trim($_POST['firstname']) : '';
+            $middlename = is_string($_POST['middlename'] ?? null) ? trim($_POST['middlename']) : '';
+            $lastname = is_string($_POST['lastname'] ?? null) ? trim($_POST['lastname']) : '';
             $fullname = trim($firstname . (empty($middlename) ? "" : " " . $middlename) . " " . $lastname);
-            $email = trim($_POST['email'] ?? '');
+            $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
             $request_type = $_POST['request_type'] ?? 'educational';
+
+            $allowedRequestTypes = ['educational', 'medical', 'burial', 'employment', 'transportation'];
+            if (!in_array($request_type, $allowedRequestTypes, true)) {
+                $_SESSION['error_message'] = 'Invalid assistance program selected.';
+                redirect(base_url('client'));
+            }
 
             if ($requestModel->hasDuplicateActiveRequestByEmail($email, $request_type)) {
                 $_SESSION['error_message'] = "You already have a pending or approved " . ucfirst($request_type) . " request. Please wait for it to be resolved before submitting a new one.";
@@ -130,33 +142,34 @@ class RequestController {
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
-            $allowedTypes = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'heic', 'heif', 'bmp'];
             $maxSize = 10 * 1024 * 1024; // 10MB per file
+            $allowedMimes = [
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+                'image/webp' => 'webp',
+                'image/gif' => 'gif',
+                'image/heic' => 'heic',
+                'image/heif' => 'heif',
+                'image/bmp' => 'bmp',
+                'image/x-ms-bmp' => 'bmp',
+            ];
 
             foreach ($_FILES as $key => $file) {
                 if ($file['error'] === UPLOAD_ERR_OK) {
-                    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                    if (!in_array($ext, $allowedTypes)) {
-                        $_SESSION['error_message'] = "Invalid file type for $key. Only images are allowed.";
-                        redirect(base_url('client/' . $request_type));
-                    }
-                    if ($file['size'] > $maxSize) {
+                    if (!is_uploaded_file($file['tmp_name']) || $file['size'] <= 0 || $file['size'] > $maxSize) {
                         $_SESSION['error_message'] = "File too large for $key.";
                         redirect(base_url('client/' . $request_type));
                     }
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
                     $mime = finfo_file($finfo, $file['tmp_name']);
                     finfo_close($finfo);
-                    $allowedMimes = [
-                        'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png', 'image/webp',
-                        'image/gif', 'image/heic', 'image/heif', 'image/bmp', 'image/x-ms-bmp'
-                    ];
-                    $browserMime = strtolower($file['type']);
-                    if (!in_array($mime, $allowedMimes) && !in_array($browserMime, $allowedMimes) && strpos($mime, 'image/') !== 0 && strpos($browserMime, 'image/') !== 0) {
+                    if (!isset($allowedMimes[$mime])) {
                         $_SESSION['error_message'] = "Invalid file content for $key. Only images are allowed.";
                         redirect(base_url('client/' . $request_type));
                     }
-                    $newName = $request_type . '_' . time() . '_' . $key . '.' . $ext;
+                    $ext = $allowedMimes[$mime];
+                    $safeKey = preg_replace('/[^a-zA-Z0-9_-]/', '_', (string) $key);
+                    $newName = $request_type . '_' . bin2hex(random_bytes(16)) . '_' . $safeKey . '.' . $ext;
                     $targetPath = $uploadDir . $newName;
 
                     if (move_uploaded_file($file['tmp_name'], $targetPath)) {
@@ -176,7 +189,7 @@ class RequestController {
                 }
             }
 
-            $reference_number = strtoupper(substr(md5(uniqid(rand(), true)), 0, 10));
+            $reference_number = strtoupper(bin2hex(random_bytes(5)));
 
             $data = [
                 'reference_number' => $reference_number,
@@ -195,8 +208,8 @@ class RequestController {
             $_SESSION['error_message'] = "There was an error processing your request. Please try again.";
             redirect(base_url('client/' . $request_type));
         } catch (Throwable $e) {
-            error_log("Error in RequestController::submit: " . $e->getMessage(), 3, ROOT_PATH . '/storage/logs/error.log');
-            $_SESSION['error_message'] = "System Error: " . $e->getMessage();
+            error_log("Error in RequestController::submit: " . $e->getMessage());
+            $_SESSION['error_message'] = 'A system error occurred. Please try again later.';
             redirect(base_url('client/' . ($request_type ?? 'educational')));
         }
     }
@@ -267,12 +280,13 @@ class RequestController {
         require_once APP_PATH . '/models/Inquiry.php';
         $inquiryModel = new Inquiry();
 
-        $name = trim($_POST['name'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $subject = trim($_POST['subject'] ?? '');
-        $message = trim($_POST['message'] ?? '');
+        $name = is_string($_POST['name'] ?? null) ? trim($_POST['name']) : '';
+        $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
+        $subject = is_string($_POST['subject'] ?? null) ? trim($_POST['subject']) : '';
+        $message = is_string($_POST['message'] ?? null) ? trim($_POST['message']) : '';
 
-        if (empty($name) || empty($email) || empty($message)) {
+        if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $message === ''
+            || strlen($name) > 150 || strlen($email) > 254 || strlen($subject) > 200 || strlen($message) > 5000) {
             $_SESSION['error_message'] = "Please fill in all required fields.";
             redirect(base_url('client#contact'));
         }

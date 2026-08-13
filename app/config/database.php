@@ -3,25 +3,21 @@
  * Database Configuration
  */
 
-// Load environment variables from .env file
-if (file_exists(ROOT_PATH . '/.env')) {
-    $env = parse_ini_file(ROOT_PATH . '/.env');
-    define('DB_HOST', $env['DB_HOST'] ?? 'localhost');
-    define('DB_USER', $env['DB_USER'] ?? 'root');
-    define('DB_PASS', $env['DB_PASS'] ?? '');
-    define('DB_NAME', $env['DB_NAME'] ?? 'ssfo');
-} else {
-    // Fallback to defaults (for development)
-    define('DB_HOST', 'localhost');
-    define('DB_USER', 'root');
-    define('DB_PASS', 'manok123');
-    define('DB_NAME', 'ssfo');
-}
+// InfinityFree MySQL connection details. This deployment does not use .env.
+define('DB_HOST', 'sql104.infinityfree.com');
+define('DB_PORT', 3306);
+define('DB_USER', 'if0_42641407');
+define('DB_PASS', 'cagatinmark2005');
+define('DB_NAME', 'if0_42641407_ssfo');
 
 function get_db_connection() {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        error_log('Database connection failed: ' . $conn->connect_error);
+        throw new RuntimeException('Unable to connect to the database.');
     }
+
+    $conn->set_charset('utf8mb4');
+
     return $conn;
 }

@@ -54,6 +54,35 @@ class Request {
         return $results;
     }
 
+    public function getByEmailTypeAndReferenceWithDetails($email, $type, $reference) {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM requests WHERE LOWER(email) = LOWER(?) AND request_type = ? AND reference_number = ? ORDER BY created_at DESC"
+        );
+        $stmt->bind_param("sss", $email, $type, $reference);
+        $stmt->execute();
+        $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        foreach ($results as &$master) {
+            $allowedTypes = ['educational', 'medical', 'burial', 'employment', 'transportation'];
+            if (!in_array($master['request_type'], $allowedTypes, true)) {
+                continue;
+            }
+            $table = 'req_' . $master['request_type'];
+            $detailStmt = $this->db->prepare("SELECT * FROM $table WHERE request_id = ?");
+            if ($detailStmt) {
+                $detailStmt->bind_param('i', $master['id']);
+                $detailStmt->execute();
+                $detail = $detailStmt->get_result()->fetch_assoc();
+                if ($detail) {
+                    unset($detail['id'], $detail['request_id']);
+                    $master['details'] = json_encode($detail);
+                }
+            }
+        }
+        unset($master);
+        return $results;
+    }
+
     public function getByIdentifier($identifier) {
         $searchTerm = "%$identifier%";
         $stmt = $this->db->prepare("SELECT * FROM requests WHERE fullname LIKE ? OR email LIKE ? OR details LIKE ? ORDER BY created_at DESC");

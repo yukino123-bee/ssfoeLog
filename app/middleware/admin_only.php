@@ -8,7 +8,7 @@ require_once __DIR__ . '/auth.php';
 function admin_only_middleware() {
     auth_middleware();
 
-    if ($_SESSION['role'] !== ROLE_ADMIN) {
+    if (($_SESSION['role'] ?? null) !== ROLE_ADMIN) {
         // Redirect non-admins to client dashboard or unauthorized page
         redirect(base_url('client/dashboard'));
     }

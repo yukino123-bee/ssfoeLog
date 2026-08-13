@@ -26,6 +26,9 @@ function csrf_middleware() {
         }
 
         $token = $_POST['csrf_token'] ?? '';
+        if (!is_string($token)) {
+            $token = '';
+        }
         if (!validate_csrf_token($token)) {
             if (!headers_sent()) {
                 http_response_code(403);

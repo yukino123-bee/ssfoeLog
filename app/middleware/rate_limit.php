@@ -13,7 +13,7 @@ function rate_limit_middleware() {
     }
     
     $ip = get_client_ip();
-    $endpoint = $_SERVER['REQUEST_URI'];
+    $endpoint = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
     
     // Different limits for different endpoints
     $limits = get_rate_limit_config();
@@ -21,6 +21,11 @@ function rate_limit_middleware() {
     
     if (!isset($limits[$limit_key])) {
         return; // No rate limiting for this endpoint
+    }
+
+    // Page views should not consume form-submission limits.
+    if ($limit_key !== 'api' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+        return;
     }
     
     $config = $limits[$limit_key];
@@ -31,7 +36,10 @@ function rate_limit_middleware() {
     $data = [];
     
     if (file_exists($file)) {
-        $data = json_decode(file_get_contents($file), true);
+        $data = json_decode((string) file_get_contents($file), true);
+        if (!is_array($data)) {
+            $data = [];
+        }
     }
     
     $now = time();
@@ -48,31 +56,24 @@ function rate_limit_middleware() {
     // Check if limit exceeded
     if (count($data['requests']) >= $max_requests) {
         http_response_code(429); // Too Many Requests
-        die(json_encode([
-            'error' => 'Rate limit exceeded',
-            'retry_after' => $time_window,
-            'message' => 'Too many requests. Please try again later.'
-        ]));
+        header('Retry-After: ' . $time_window);
+        die('Too many requests. Please try again later.');
     }
     
     // Add current request
     $data['requests'][] = $now;
     
     // Save updated data
-    file_put_contents($file, json_encode($data));
+    file_put_contents($file, json_encode($data), LOCK_EX);
     
     // Clean up old files (older than 24 hours)
     cleanup_old_rate_limit_files();
 }
 
 function get_client_ip() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else {
-        $ip = $_SERVER['REMOTE_ADDR'];
-    }
+    // Forwarding headers are client-controlled unless a trusted proxy list is
+    // configured. REMOTE_ADDR cannot be spoofed through a normal HTTP header.
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
     return filter_var($ip, FILTER_VALIDATE_IP) ?: '0.0.0.0';
 }
 
@@ -83,6 +84,8 @@ function get_rate_limit_config() {
         'unlock-programs' => ['requests' => 10, 'window' => 300], // 10 per 5 minutes
         'api' => ['requests' => 100, 'window' => 3600],          // 100 per hour
         'contact' => ['requests' => 5, 'window' => 3600],        // 5 per hour
+        'submission' => ['requests' => 10, 'window' => 3600],    // 10 per hour
+        'lookup' => ['requests' => 30, 'window' => 900],         // 30 per 15 minutes
     ];
 }
 
@@ -97,6 +100,10 @@ function get_endpoint_limit_key($endpoint) {
         return 'api';
     } elseif (strpos($endpoint, 'contact') !== false) {
         return 'contact';
+    } elseif (strpos($endpoint, '/client/submit') !== false) {
+        return 'submission';
+    } elseif (strpos($endpoint, '/client/track') !== false || strpos($endpoint, '/client/details') !== false) {
+        return 'lookup';
     }
     return null;
 }

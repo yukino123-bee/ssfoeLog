@@ -20,7 +20,7 @@ require_once APP_PATH . '/views/layouts/header.php';
                     Request <span class="text-transparent" style="-webkit-text-stroke: 1px #111111;">Details</span>
                 </h1>
                 <p class="text-lg font-bold opacity-60">
-                    Enter your Email and select a Category to view the full details of your application.
+                    Enter your email, reference number, and category to view your application details.
                 </p>
             </div>
 
@@ -31,9 +31,14 @@ require_once APP_PATH . '/views/layouts/header.php';
                         <i class="fas fa-search"></i>
                     </div>
                     <form id="track-form" method="POST" action="" class="flex flex-col md:flex-row items-stretch gap-4">
+                        <input type="hidden" name="csrf_token" value="<?php echo escape_output(generate_csrf_token(), 'attr'); ?>">
                         <input type="email" name="email" required 
                                placeholder="ENTER YOUR EMAIL" 
                                value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>"
+                               class="flex-1 bg-white px-6 py-4 md:px-8 md:py-6 text-[11px] font-black uppercase tracking-widest focus:outline-none border-l-4 border-transparent focus:border-optimum-red transition-all text-optimum-dark placeholder:text-slate-400">
+                        <input type="text" name="reference" required maxlength="10" pattern="[A-Fa-f0-9]{10}" autocomplete="off"
+                               placeholder="REFERENCE NUMBER"
+                               value="<?php echo escape_output($_POST['reference'] ?? '', 'attr'); ?>"
                                class="flex-1 bg-white px-6 py-4 md:px-8 md:py-6 text-[11px] font-black uppercase tracking-widest focus:outline-none border-l-4 border-transparent focus:border-optimum-red transition-all text-optimum-dark placeholder:text-slate-400">
                         
                         <div class="relative flex-1">

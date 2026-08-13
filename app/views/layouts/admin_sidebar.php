@@ -77,10 +77,13 @@
                     <i class="fas fa-server text-base opacity-80 group-hover:opacity-100 transition-opacity"></i>
                     <span class="text-sm">System Status</span>
                 </a>
-                <a href="<?php echo base_url('logout'); ?>" class="flex items-center space-x-3 px-4 py-2.5 rounded-lg text-rose-200/70 font-medium hover:bg-rose-500/20 hover:text-rose-300 transition-all duration-200 group mt-4 border border-rose-900/50">
+                <form method="POST" action="<?php echo base_url('logout'); ?>" class="mt-4">
+                    <input type="hidden" name="csrf_token" value="<?php echo escape_output(generate_csrf_token(), 'attr'); ?>">
+                    <button type="submit" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-rose-200/70 font-medium hover:bg-rose-500/20 hover:text-rose-300 transition-all duration-200 group border border-rose-900/50">
                     <i class="fas fa-sign-out-alt text-base opacity-80 group-hover:opacity-100 transition-opacity"></i>
                     <span class="text-sm">Log Out</span>
-                </a>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

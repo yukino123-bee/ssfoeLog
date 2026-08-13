@@ -4,3 +4,4 @@ node_modules/
 *.log
 storage/logs/*.log
 public/uploads/*
+!public/uploads/.htaccess

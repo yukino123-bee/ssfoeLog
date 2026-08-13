@@ -277,7 +277,9 @@ class AdminController {
             $output = fopen('php://output', 'w');
             fputcsv($output, ['ID','Full Name','Email','Request Type','Status','Date Submitted']);
             foreach ($data as $row) {
-                fputcsv($output, [$row['id'],$row['fullname'],$row['email'],$row['request_type'],$row['status'],$row['created_at']]);
+                fputcsv($output, array_map('spreadsheet_safe_value', [
+                    $row['id'], $row['fullname'], $row['email'], $row['request_type'], $row['status'], $row['created_at']
+                ]));
             }
             fclose($output);
         }
@@ -316,7 +318,7 @@ class AdminController {
 
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                fputcsv($output, [
+                fputcsv($output, array_map('spreadsheet_safe_value', [
                     $row['id'],
                     $row['created_at'],
                     $row['applicant'],
@@ -325,7 +327,7 @@ class AdminController {
                     $row['old_status'],
                     $row['new_status'],
                     $row['remarks']
-                ]);
+                ]));
             }
         }
 
@@ -880,4 +882,3 @@ class AdminController {
     }
 
 }
-

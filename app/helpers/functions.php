@@ -46,7 +46,10 @@ function generate_csrf_token() {
  * Validate CSRF token
  */
 function validate_csrf_token($token) {
-    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+    return is_string($token)
+        && isset($_SESSION['csrf_token'])
+        && is_string($_SESSION['csrf_token'])
+        && hash_equals($_SESSION['csrf_token'], $token);
 }
 
 /**
@@ -108,6 +111,17 @@ function formatDate($date, $format = 'M d, Y') {
  */
 function formatNumber($number) {
     return number_format($number);
+}
+
+/**
+ * Prevent spreadsheet applications from interpreting exported user data as a formula.
+ */
+function spreadsheet_safe_value($value) {
+    $value = is_scalar($value) || $value === null ? (string) $value : '';
+    if ($value !== '' && preg_match('/^[\s]*[=+\-@]/', $value)) {
+        return "'" . $value;
+    }
+    return $value;
 }
 
 /**

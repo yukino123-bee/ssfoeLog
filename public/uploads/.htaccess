@@ -1,0 +1,9 @@
+Options -Indexes
+
+# Uploaded files are data only. Never execute scripts from this directory.
+<FilesMatch "\.(?:php|phtml|phar|cgi|pl|py|sh|shtml)$">
+    Require all denied
+</FilesMatch>
+
+RemoveHandler .php .phtml .phar .cgi .pl .py .sh .shtml
+RemoveType .php .phtml .phar .cgi .pl .py .sh .shtml

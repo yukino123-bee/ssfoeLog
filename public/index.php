@@ -4,7 +4,16 @@
  * Security: Apply security headers before any content output
  */
 
-@session_start();
+// Configure the session cookie before starting the session. These settings are
+// supported on shared hosting and do not change the application's session API.
+$isHttps = (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+    || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+ini_set('session.use_strict_mode', '1');
+ini_set('session.use_only_cookies', '1');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.cookie_secure', $isHttps ? '1' : '0');
+session_start();
 
 // Start output buffering to prevent headers already sent errors
 ob_start();
@@ -103,10 +112,6 @@ if (array_key_exists($path, $routes)) {
         http_response_code(500);
         echo "<h1>500 Internal Server Error</h1>";
         echo "<p>An unexpected error occurred. Please try again later.</p>";
-        echo "<div style='background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-family: sans-serif;'>";
-        echo "<strong>Debug info:</strong> " . htmlspecialchars($e->getMessage());
-        echo "<br><strong>File:</strong> " . htmlspecialchars($e->getFile() . ':' . $e->getLine());
-        echo "</div>";
     }
 } else {
     // 404 Not Found
@@ -114,5 +119,4 @@ if (array_key_exists($path, $routes)) {
     echo "<h1>404 Not Found</h1>";
     echo "<p>The requested page was not found on this server.</p>";
 }
-
 
