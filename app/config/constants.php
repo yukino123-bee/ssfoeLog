@@ -17,13 +17,8 @@ define('STATUS_REJECTED', 'rejected');
 define('STATUS_COMPLETED', 'completed');
 
 // SMS Configuration
-if (file_exists(ROOT_PATH . '/.env')) {
-    $env = parse_ini_file(ROOT_PATH . '/.env');
-    define('SMS_API_KEY', $env['SMS_API_KEY'] ?? '');
-    define('SMS_SENDER_NAME', $env['SMS_SENDER_NAME'] ?? 'SSFO');
-    define('SMS_ENABLED', !empty($env['SMS_ENABLED']) && filter_var($env['SMS_ENABLED'], FILTER_VALIDATE_BOOLEAN));
-} else {
-    define('SMS_API_KEY', '');
-    define('SMS_SENDER_NAME', 'SSFO');
-    define('SMS_ENABLED', false);
-}
+define('APP_ENV', app_env('APP_ENV', 'local'));
+define('APP_DEBUG', filter_var(app_env('APP_DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN));
+define('SMS_API_KEY', app_env('SMS_API_KEY', ''));
+define('SMS_SENDER_NAME', app_env('SMS_SENDER_NAME', 'SSFO'));
+define('SMS_ENABLED', filter_var(app_env('SMS_ENABLED', 'false'), FILTER_VALIDATE_BOOLEAN));

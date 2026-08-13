@@ -14,7 +14,7 @@
     "scripts": {
         "setup": [
             "@composer install",
-            "@php -r \"foreach (['storage/logs', 'public/uploads/requests'] as $dir) { if (!is_dir($dir)) { mkdir($dir, 0755, true); } }\""
+            "@php -r \"foreach (['storage/logs', 'storage/rate_limits', 'public/uploads/requests'] as $dir) { if (!is_dir($dir)) { mkdir($dir, 0755, true); } }\""
         ],
         "start": "@php -S 127.0.0.1:8080 -t public public/router.php",
         "serve": "@start",

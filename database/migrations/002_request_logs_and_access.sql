@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS client_apply_access (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fullname VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
+    mobile_number VARCHAR(20) NULL,
     referral_code VARCHAR(32) NOT NULL UNIQUE,
     access_pin VARCHAR(12) NULL,
     status ENUM('pending','approved','rejected') DEFAULT 'pending',
@@ -27,5 +28,6 @@ CREATE TABLE IF NOT EXISTS client_apply_access (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_email (email),
+    INDEX idx_mobile (mobile_number),
     INDEX idx_status (status)
 );

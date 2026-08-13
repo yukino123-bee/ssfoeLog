@@ -3,5 +3,6 @@ vendor/
 node_modules/
 *.log
 storage/logs/*.log
+storage/rate_limits/*
 public/uploads/*
 !public/uploads/.htaccess
