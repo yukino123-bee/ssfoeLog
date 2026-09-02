@@ -1,6 +1,6 @@
 <?php
 
-$title = "SSFO eLog - Better Support for Every Community";
+$title = "Communifund Assistance System - Better Support for Every Community";
 $body_class = "font-sans selection:bg-brand-red-500/10 min-h-screen flex flex-col relative";
 require_once APP_PATH . '/views/layouts/header.php';
 
@@ -293,10 +293,10 @@ require_once APP_PATH . '/views/layouts/header.php';
                 <div class="space-y-8">
                     <div>
                         <p class="text-[11px] font-black text-optimum-red uppercase tracking-super-wide mb-4">About the Fund</p>
-                        <h2 class="text-4xl md:text-5xl font-black text-optimum-dark tracking-tight uppercase">Why SSFO <span class="text-xs align-top opacity-40">GOV</span></h2>
+                        <h2 class="text-4xl md:text-5xl font-black text-optimum-dark tracking-tight uppercase">Why Communifund <span class="text-xs align-top opacity-40">GOV</span></h2>
                     </div>
                     <p class="text-lg font-bold opacity-60 leading-relaxed">
-                        SSFO is dedicated to empowering local communities through direct financial support and accessible government resources.
+                        Communifund is dedicated to empowering local communities through direct financial support and accessible government resources.
                     </p>
                     <p class="text-base font-medium opacity-50 leading-relaxed">
                         Our platform ensures that aid reaches those who need it most, with full accountability and real-time tracking at every stage of the application process.
@@ -353,7 +353,7 @@ require_once APP_PATH . '/views/layouts/header.php';
                             <div class="w-12 h-12 bg-white flex flex-shrink-0 items-center justify-center shadow-lg text-optimum-red transition-transform hover:scale-110"><i class="fas fa-envelope"></i></div>
                             <div>
                                 <p class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-1">Email Address</p>
-                                <p class="text-base md:text-lg font-black text-optimum-dark break-all">support@ssfo.gov</p>
+                                <p class="text-base md:text-lg font-black text-optimum-dark break-all">support@communifund.gov</p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-6">

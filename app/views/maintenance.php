@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance — SSFO eLog</title>
+    <title>Maintenance — Communifund Assistance System</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -70,7 +70,7 @@
 <body>
     <div class="container">
         <h1>We'll be back shortly!</h1>
-        <p>The SSFO eLog is currently undergoing scheduled maintenance. While you wait, try to beat your high score!</p>
+        <p>The Communifund Assistance System is currently undergoing scheduled maintenance. While you wait, try to beat your high score!</p>
         
         <div class="game-container">
             <div class="score-board">Score: <span id="score">0</span> | HI: <span id="hi-score">0</span></div>

@@ -1,13 +1,15 @@
 <?php
 /**
- * SSFO Front Controller
+ * Communifund Assistance System Front Controller
  * Security: Apply security headers before any content output
  */
 
 // Configure the session cookie before starting the session. These settings are
 // supported on shared hosting and do not change the application's session API.
-$isHttps = (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
-    || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+$directHttps = !empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off';
+$trustedProxyValues = array_values(array_filter(array_map('trim', explode(',', getenv('TRUSTED_PROXIES') ?: ''))));
+$fromTrustedProxy = in_array($_SERVER['REMOTE_ADDR'] ?? '', $trustedProxyValues, true);
+$isHttps = $directHttps || ($fromTrustedProxy && strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https');
 ini_set('session.use_strict_mode', '1');
 ini_set('session.use_only_cookies', '1');
 ini_set('session.cookie_httponly', '1');
@@ -119,4 +121,3 @@ if (array_key_exists($path, $routes)) {
     echo "<h1>404 Not Found</h1>";
     echo "<p>The requested page was not found on this server.</p>";
 }
-

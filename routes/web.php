@@ -53,5 +53,6 @@ return [
     '/client/employment' => ['handler' => 'RequestController@employment', 'middleware' => []],
     '/client/transportation' => ['handler' => 'RequestController@transportation', 'middleware' => []],
     '/client/proof' => ['handler' => 'RequestController@proof', 'middleware' => []],
+    '/client/document' => ['handler' => 'RequestController@document', 'middleware' => ['rate_limit']],
     '/client/announcements/ajax' => ['handler' => 'RequestController@announcementsAjax', 'middleware' => []],
 ];

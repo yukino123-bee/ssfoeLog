@@ -34,9 +34,17 @@ function rate_limit_middleware() {
     
     $file = RATE_LIMIT_STORAGE_PATH . md5($ip . $limit_key) . '.json';
     $data = [];
-    
-    if (file_exists($file)) {
-        $data = json_decode((string) file_get_contents($file), true);
+    $handle = fopen($file, 'c+');
+    if ($handle === false || !flock($handle, LOCK_EX)) {
+        if (is_resource($handle)) fclose($handle);
+        error_log('Rate limiter storage is unavailable; rejecting request safely.');
+        http_response_code(503);
+        exit('Service temporarily unavailable.');
+    }
+    rewind($handle);
+    $stored = stream_get_contents($handle);
+    if (is_string($stored) && $stored !== '') {
+        $data = json_decode($stored, true);
         if (!is_array($data)) {
             $data = [];
         }
@@ -55,6 +63,8 @@ function rate_limit_middleware() {
     
     // Check if limit exceeded
     if (count($data['requests']) >= $max_requests) {
+        flock($handle, LOCK_UN);
+        fclose($handle);
         http_response_code(429); // Too Many Requests
         header('Retry-After: ' . $time_window);
         die('Too many requests. Please try again later.');
@@ -64,7 +74,12 @@ function rate_limit_middleware() {
     $data['requests'][] = $now;
     
     // Save updated data
-    file_put_contents($file, json_encode($data), LOCK_EX);
+    rewind($handle);
+    ftruncate($handle, 0);
+    fwrite($handle, json_encode($data));
+    fflush($handle);
+    flock($handle, LOCK_UN);
+    fclose($handle);
     
     // Clean up old files (older than 24 hours)
     cleanup_old_rate_limit_files();
@@ -104,6 +119,8 @@ function get_endpoint_limit_key($endpoint) {
         return 'submission';
     } elseif (strpos($endpoint, '/client/track') !== false || strpos($endpoint, '/client/details') !== false) {
         return 'lookup';
+    } elseif (strpos($endpoint, '/client/document') !== false) {
+        return 'api';
     }
     return null;
 }

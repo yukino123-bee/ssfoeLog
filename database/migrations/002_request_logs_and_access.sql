@@ -1,5 +1,5 @@
--- Run on existing ssfo database if tables are missing
-USE ssfo;
+-- Run on an existing Communifund Assistance System database if tables are missing
+USE communifund_assistance;
 
 CREATE TABLE IF NOT EXISTS request_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,

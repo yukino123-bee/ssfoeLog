@@ -7,12 +7,12 @@
                         <i class="fas fa-hand-holding-heart"></i>
                     </div>
                     <div class="leading-none text-left">
-                        <span class="text-xl font-black tracking-tighter text-white block">SSFO</span>
+                        <span class="text-xl font-black tracking-tighter text-white block">Communifund</span>
                         <span class="text-[13px] font-bold text-gray-400 tracking-tight -mt-1 block">Assistance</span>
                     </div>
                 </div>
                 <p class="text-xs font-bold text-slate-300 leading-relaxed max-w-xs">
-                    SSFO is dedicated to empowering local communities through direct financial support and accessible government resources.
+                    Communifund is dedicated to empowering local communities through direct financial support and accessible government resources.
                 </p>
                 <div class="flex space-x-4">
                     <a href="#" class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-optimum-red transition-all duration-300">
@@ -47,11 +47,11 @@
                 <ul class="space-y-6 text-sm font-bold text-slate-300">
                     <li class="flex items-start space-x-4">
                         <span class="text-optimum-red mt-1 flex-shrink-0"><i class="fas fa-map-marker-alt"></i></span>
-                        <span>Support Services Facilitators Office<br>San Miguel, Zamboanga del Sur, Philippines</span>
+                        <span>Communifund Assistance System<br>San Miguel, Zamboanga del Sur, Philippines</span>
                     </li>
                     <li class="flex items-center space-x-4">
                         <span class="text-optimum-red flex-shrink-0"><i class="fas fa-envelope"></i></span>
-                        <a href="mailto:support@ssfo.gov" class="hover:text-white transition-colors">support@ssfo.gov</a>
+                        <a href="mailto:support@communifund.gov" class="hover:text-white transition-colors">support@communifund.gov</a>
                     </li>
                     <li class="flex items-center space-x-4">
                         <span class="text-optimum-red flex-shrink-0"><i class="fas fa-phone"></i></span>
@@ -71,7 +71,7 @@
         
         <!-- Bottom Bar -->
         <div class="max-w-7xl mx-auto pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-500 space-y-4 md:space-y-0 text-center">
-            <div>&copy; <?php echo date('Y'); ?> SSFO eLog. All rights reserved.</div>
+            <div>&copy; <?php echo date('Y'); ?> Communifund Assistance System. All rights reserved.</div>
         </div>
     </footer>
     <script src="<?php echo asset_url('js/main.js'); ?>"></script>

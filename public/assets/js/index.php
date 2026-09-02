@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - SSFO eLog</title>
+    <title>Admin Dashboard - Communifund Assistance System</title>
     <link rel="stylesheet" href="../assets/css/base.css">
     <link rel="stylesheet" href="../assets/css/forms.css">
     <link rel="stylesheet" href="../assets/css/components.css">
@@ -17,8 +17,8 @@
     <nav class="admin-navbar">
         <div class="logo">
             <button id="sidebar-toggle" aria-label="Toggle Sidebar">☰</button>
-            <img src="../images/logos.png" alt="SSFO logo" height="40">
-            <h1>eLog Admin</h1>
+            <img src="../images/communiFund.png" alt="Communifund Assistance System logo" height="40">
+            <h1>Communifund Admin</h1>
         </div>
         <div class="admin-title">Dashboard</div>
         <div class="user-menu">

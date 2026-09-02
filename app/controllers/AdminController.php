@@ -244,7 +244,7 @@ class AdminController {
         if ($report_type === 'program' && !empty($_GET['prog_status']) && $_GET['prog_status'] !== 'all') {
             $data = array_values(array_filter($data, fn($r) => $r['status'] === $_GET['prog_status']));
         }
-        $filename = 'ssfo_' . $report_type . '_report_' . date('Y-m-d');
+        $filename = 'communifund_assistance_' . $report_type . '_report_' . date('Y-m-d');
         if ($format === 'html') {
             $title = "Exported Report - " . APP_NAME;
             require_once APP_PATH . '/views/admin/report_export_view.php';
@@ -308,7 +308,7 @@ class AdminController {
                 
         $res = $db->query($sql);
 
-        $filename = 'ssfo_request_logs_' . date('Y-m-d_H-i-s') . '.csv';
+        $filename = 'communifund_assistance_request_logs_' . date('Y-m-d_H-i-s') . '.csv';
 
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -367,6 +367,13 @@ class AdminController {
                     } else {
                         notify_client_status_update($request['email'], $request['fullname'], $request['request_type'], $status, $request['reference_number']);
                     }
+                }
+
+                // SMS notification
+                $contactNumber = $request['contact'] ?? $request['phone'] ?? $request['driver_contact'] ?? null;
+                if ($request && !empty($contactNumber) && defined('SMS_ENABLED') && SMS_ENABLED) {
+                    require_once APP_PATH . '/helpers/sms.php';
+                    notify_client_status_sms($contactNumber, $request['fullname'], $request['request_type'], $status, $request['reference_number'] ?? '');
                 }
             } else {
                 $_SESSION['error_message'] = "Failed to update status";
@@ -711,17 +718,22 @@ class AdminController {
         require_once APP_PATH . '/models/User.php';
         $userModel = new User();
         $adminId = $_SESSION['user_id'] ?? 0;
+        $currentAdmin = $userModel->findById($adminId);
+        if (!$currentAdmin || ($currentAdmin['role'] ?? null) !== ROLE_ADMIN) {
+            redirect(base_url('login'));
+        }
         
         $fullname = trim($_POST['fullname'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
         $password = $_POST['password'] ?? '';
+        $currentPassword = $_POST['current_password'] ?? '';
         
         $department = trim($_POST['department'] ?? '');
         $position = trim($_POST['position'] ?? '');
         $bio = trim($_POST['bio'] ?? '');
 
-        if (empty($fullname) || empty($email)) {
+        if (empty($fullname) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['error_message'] = "Full name and email are required.";
             redirect(base_url('admin/profile'));
         }
@@ -732,13 +744,29 @@ class AdminController {
             'phone' => $phone
         ];
 
+        $emailChanged = strcasecmp($email, (string) ($currentAdmin['email'] ?? '')) !== 0;
+        if (($emailChanged || !empty($password))
+            && (!is_string($currentPassword) || !password_verify($currentPassword, $currentAdmin['password'] ?? ''))) {
+            $_SESSION['error_message'] = 'Your current password is required to change your email or password.';
+            redirect(base_url('admin/profile'));
+        }
+
         if (!empty($password)) {
+            require_once APP_PATH . '/helpers/password_validator.php';
+            $passwordValidation = validate_password($password);
+            if (!$passwordValidation['valid']) {
+                $_SESSION['error_message'] = implode(' ', $passwordValidation['errors']);
+                redirect(base_url('admin/profile'));
+            }
             $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
 
         // Update user
         if ($userModel->update($adminId, $updateData)) {
             $_SESSION['user_fullname'] = $fullname; // Update session
+            if (!empty($password)) {
+                session_regenerate_id(true);
+            }
             
             // Update admin_info
             $db = get_db_connection();
@@ -836,7 +864,7 @@ class AdminController {
         if ($id) {
             require_once APP_PATH . '/models/Notification.php';
             $notificationModel = new Notification();
-            $notificationModel->markAsRead($id);
+            $notificationModel->markAsRead($id, (int) ($_SESSION['user_id'] ?? 0));
             echo json_encode(['status' => 'success']);
         } else {
             echo json_encode(['status' => 'error']);

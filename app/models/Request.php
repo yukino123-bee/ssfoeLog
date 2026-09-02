@@ -98,6 +98,15 @@ class Request {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getPublicStatusByReferenceNumber($ref) {
+        $stmt = $this->db->prepare(
+            "SELECT id, request_type, status, created_at, updated_at FROM requests WHERE reference_number = ? ORDER BY created_at DESC"
+        );
+        $stmt->bind_param("s", $ref);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getByUserId($user_id) {
         $stmt = $this->db->prepare("SELECT * FROM requests WHERE user_id = ? ORDER BY created_at DESC");
         $stmt->bind_param("i", $user_id);

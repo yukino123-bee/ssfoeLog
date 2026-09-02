@@ -1,4 +1,4 @@
-# SSFO eLog — local setup
+# Communifund Assistance System — local setup
 
 ## Requirements
 
@@ -16,10 +16,6 @@
    `database/seeders.sql` into MySQL if the database has not been created yet.
 5. Run `composer start`, then open <http://127.0.0.1:8080>.
 
-The current local database includes the default administrator:
-
-- Email: `admin@ssfo.local`
-- Password: `admin123`
-
-Change the default password after first login. SMS is disabled locally unless
-explicitly enabled in `.env`.
+No administrator credentials are seeded. Provision the first administrator with
+a unique random password through a protected local or deployment process. SMS is
+disabled locally unless explicitly enabled in `.env`.

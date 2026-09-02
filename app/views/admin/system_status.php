@@ -2,7 +2,7 @@
 
 <div class="max-w-4xl">
     <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">System Status</h1>
-    <p class="mt-1 text-gray-500 text-sm mb-8">Manage the operational state of the SSFO eLog.</p>
+    <p class="mt-1 text-gray-500 text-sm mb-8">Manage the operational state of the Communifund Assistance System.</p>
 
     <?php if (!empty($_SESSION['success_message'])): ?>
         <div class="mb-6 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm font-medium flex items-center gap-3">

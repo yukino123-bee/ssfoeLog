@@ -1,16 +1,16 @@
 -- ============================================================================
--- SSFO eLog Complete Database Setup Script
+-- Communifund Assistance System Complete Database Setup Script
 -- ============================================================================
--- This script creates the complete SSFO database with all tables
+-- This script creates the complete Communifund Assistance System database with all tables
 -- Run this FIRST before running seeders.sql
 -- ============================================================================
 
 -- Drop existing database if needed (uncomment to use)
--- DROP DATABASE IF EXISTS ssfo;
+-- DROP DATABASE IF EXISTS communifund_assistance;
 
 -- Create the database
-CREATE DATABASE IF NOT EXISTS ssfo;
-USE ssfo;
+CREATE DATABASE IF NOT EXISTS communifund_assistance;
+USE communifund_assistance;
 
 -- ============================================================================
 -- SECTION 1: CORE TABLES
@@ -325,4 +325,4 @@ CREATE TABLE IF NOT EXISTS inquiries (
 -- VERIFICATION QUERY
 -- ============================================================================
 SHOW TABLES;
-SELECT COUNT(*) as total_tables FROM information_schema.tables WHERE table_schema = 'ssfo';
+SELECT COUNT(*) as total_tables FROM information_schema.tables WHERE table_schema = 'communifund_assistance';

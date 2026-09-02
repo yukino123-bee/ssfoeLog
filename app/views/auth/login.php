@@ -197,13 +197,25 @@ $captcha_secret = $_SESSION['login_captcha_token'] ?? '';
 
             <!-- Alerts -->
             <?php if (isset($error_message)): ?>
-                <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
-                    <?php echo htmlspecialchars($error_message); ?>
+                <div class="rounded-2xl border border-red-200/80 bg-red-50/80 p-4 shadow-sm backdrop-blur-sm flex items-start gap-3 text-sm text-red-900" role="alert">
+                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="fas fa-exclamation-triangle text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-red-950 text-xs uppercase tracking-wider mb-0.5">Authentication Failed</h4>
+                        <p class="text-xs text-red-700 font-medium leading-relaxed"><?php echo htmlspecialchars($error_message); ?></p>
+                    </div>
                 </div>
             <?php endif; ?>
             <?php if (isset($_SESSION['success_message'])): ?>
-                <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    <?php echo htmlspecialchars($_SESSION['success_message']); unset($_SESSION['success_message']); ?>
+                <div class="rounded-2xl border border-emerald-200/80 bg-emerald-50/80 p-4 shadow-sm backdrop-blur-sm flex items-start gap-3 text-sm text-emerald-900">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="fas fa-check-circle text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-emerald-950 text-xs uppercase tracking-wider mb-0.5">Success</h4>
+                        <p class="text-xs text-emerald-700 font-medium leading-relaxed"><?php echo htmlspecialchars($_SESSION['success_message']); unset($_SESSION['success_message']); ?></p>
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -265,7 +277,6 @@ $captcha_secret = $_SESSION['login_captcha_token'] ?? '';
 
 
             
-            <p class="mt-4 text-center text-xs text-gray-400 font-medium">Default Tester: admin@ssfo.local / admin123</p>
         </form>
     </div>
 

@@ -132,11 +132,17 @@
                 <p class="text-xs text-gray-500">Update your password. Leave blank if you don't want to change it.</p>
             </div>
 
-            <div class="space-y-2 mb-8 md:w-1/2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-2">
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest">Current Password</label>
+                    <input type="password" name="current_password" autocomplete="current-password" placeholder="Required to change password" class="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 focus:border-rose-300 focus:bg-white focus:ring-4 focus:ring-rose-500/10 outline-none transition-all">
+                </div>
+                <div class="space-y-2">
                 <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest">New Password</label>
                 <div class="relative group">
-                    <input type="password" name="password" placeholder="••••••••" class="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 focus:border-rose-300 focus:bg-white focus:ring-4 focus:ring-rose-500/10 outline-none transition-all">
+                    <input type="password" name="password" autocomplete="new-password" placeholder="••••••••" class="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 focus:border-rose-300 focus:bg-white focus:ring-4 focus:ring-rose-500/10 outline-none transition-all">
                     <i class="fas fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-400 transition-colors"></i>
+                </div>
                 </div>
             </div>
 

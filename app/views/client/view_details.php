@@ -116,6 +116,9 @@ require_once APP_PATH . '/views/layouts/header.php';
                                 <div class="text-left md:text-right">
                                     <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Reference Number</p>
                                     <p class="text-base font-black text-slate-800 tracking-wider"><?php echo htmlspecialchars($req['reference_number']); ?></p>
+                                    <?php if (($req['status'] ?? '') === 'approved'): ?>
+                                        <a href="<?php echo escape_output(base_url('client/proof?id=' . (int) $req['id']), 'attr'); ?>" class="inline-block mt-2 text-xs font-bold text-optimum-red hover:underline">View proof of approval</a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             
@@ -145,7 +148,7 @@ require_once APP_PATH . '/views/layouts/header.php';
                                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
                                                 <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1"><?php echo htmlspecialchars($readable_key); ?></p>
                                                 <?php if (strpos($key, 'path') !== false || strpos($key, 'file') !== false): ?>
-                                                    <a href="<?php echo base_url(htmlspecialchars($value)); ?>" target="_blank" class="text-sm font-bold text-optimum-red hover:text-optimum-dark transition-colors flex items-center gap-2">
+                                                    <a href="<?php echo escape_output(base_url('client/document?request_id=' . (int) $req['id'] . '&field=' . rawurlencode($key)), 'attr'); ?>" target="_blank" rel="noopener" class="text-sm font-bold text-optimum-red hover:text-optimum-dark transition-colors flex items-center gap-2">
                                                         <i class="fas fa-file-download"></i> View Document
                                                     </a>
                                                 <?php else: ?>

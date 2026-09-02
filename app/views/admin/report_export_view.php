@@ -102,7 +102,10 @@
                         $hasFiles = false;
                         foreach ($details as $key => $val):
                             if (strpos($key, '_path') !== false && !empty($val)):
-                                $filePath = ROOT_PATH . '/public/' . ltrim($val, '/');
+                                $fileName = basename(str_replace('\\', '/', (string) $val));
+                                $privatePath = ROOT_PATH . '/storage/uploads/requests/' . $fileName;
+                                $legacyPath = ROOT_PATH . '/public/uploads/requests/' . $fileName;
+                                $filePath = is_file($privatePath) ? $privatePath : $legacyPath;
                                 if (file_exists($filePath)):
                                     $hasFiles = true;
                                     $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
@@ -114,13 +117,14 @@
                                             <span class="font-bold text-xs text-gray-700 uppercase tracking-wider">
                                                 <?php echo htmlspecialchars($cleanDocName); ?>
                                             </span>
-                                            <a href="<?php echo base_url(ltrim($val, '/')); ?>" target="_blank" class="text-blue-600 hover:text-blue-800 text-[10px] uppercase font-bold tracking-widest print:hidden">
+                                            <?php $documentUrl = base_url('client/document?request_id=' . (int) $req['id'] . '&field=' . rawurlencode($key)); ?>
+                                            <a href="<?php echo escape_output($documentUrl, 'attr'); ?>" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 text-[10px] uppercase font-bold tracking-widest print:hidden">
                                                 Open Original
                                             </a>
                                         </div>
                                         <div class="p-4 flex items-center justify-center min-h-[150px] bg-gray-50/30">
                                             <?php if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])): ?>
-                                                <img src="<?php echo base_url(ltrim($val, '/')); ?>" class="max-w-full h-auto max-h-96 object-contain rounded-lg border border-gray-100 shadow-sm" alt="<?php echo htmlspecialchars($cleanDocName); ?>">
+                                                <img src="<?php echo escape_output($documentUrl, 'attr'); ?>" class="max-w-full h-auto max-h-96 object-contain rounded-lg border border-gray-100 shadow-sm" alt="<?php echo htmlspecialchars($cleanDocName); ?>">
                                             <?php else: ?>
                                                 <div class="text-center p-6">
                                                     <i class="fas fa-file-pdf text-5xl text-rose-400 mb-3 drop-shadow-sm"></i>

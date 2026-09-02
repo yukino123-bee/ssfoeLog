@@ -1,4 +1,4 @@
-SSFO — Program configuration notes
+Communifund Assistance System — Program configuration notes
 =========================================
 
 Each assistance type maps to its own detail table:

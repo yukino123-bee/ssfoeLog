@@ -32,11 +32,13 @@ require_once APP_PATH . '/views/layouts/header.php';
                     </div>
                     <form id="track-form" method="POST" action="" class="flex flex-col md:flex-row items-stretch gap-4">
                         <input type="hidden" name="csrf_token" value="<?php echo escape_output(generate_csrf_token(), 'attr'); ?>">
-                        <input type="text" name="identifier" required 
-                               maxlength="10" pattern="[A-Fa-f0-9]{10}" autocomplete="off"
-                               value="<?php echo escape_output($identifier ?? '', 'attr'); ?>"
-                               placeholder="10-CHARACTER REFERENCE NUMBER"
-                               class="flex-1 bg-white px-6 py-4 md:px-8 md:py-6 text-[11px] font-black uppercase tracking-widest focus:outline-none border-l-4 border-transparent focus:border-optimum-red transition-all text-optimum-dark placeholder:text-slate-400">
+                        <div class="flex-1 relative flex flex-col justify-center min-w-0">
+                            <input type="text" name="identifier" required 
+                                   maxlength="10" pattern="[A-Fa-f0-9]{10}" autocomplete="off"
+                                   value="<?php echo escape_output($identifier ?? '', 'attr'); ?>"
+                                   placeholder="10-CHARACTER REFERENCE NUMBER"
+                                   class="w-full bg-white px-6 py-4 md:px-8 md:py-6 text-[11px] font-black uppercase tracking-widest focus:outline-none border-l-4 border-transparent focus:border-optimum-red transition-all text-optimum-dark placeholder:text-slate-400">
+                        </div>
                         <button type="submit" 
                                 class="px-8 py-4 md:px-12 md:py-6 bg-optimum-dark text-white font-black uppercase tracking-[0.2em] hover:bg-optimum-red transition-colors whitespace-nowrap shadow-lg">
                             CHECK STATUS
@@ -179,8 +181,8 @@ require_once APP_PATH . '/views/layouts/header.php';
                 <div id="printable-notice" class="bg-white px-8 pt-10 pb-8">
                     <!-- Print Header (Only visible on print) -->
                     <div class="hidden print:block text-center border-b-2 border-optimum-red pb-6 mb-8">
-                        <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">SSFO eLog Program</h2>
-                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Social Services & Financial Office (SSFO)</p>
+                        <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">Communifund Assistance System</h2>
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Community Assistance Portal (CAS)</p>
                     </div>
 
                     <div class="sm:flex sm:items-start">
@@ -224,7 +226,7 @@ require_once APP_PATH . '/views/layouts/header.php';
 
                     <!-- Print Footer -->
                     <div class="hidden print:block mt-12 pt-8 border-t border-slate-100 text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                        This is an electronically generated notice from the SSFO eLog.
+                        This is an electronically generated notice from the Communifund Assistance System.
                     </div>
                 </div>
                 <div class="bg-slate-50 px-8 py-6 flex flex-col sm:flex-row-reverse gap-3">
@@ -258,38 +260,24 @@ require_once APP_PATH . '/views/layouts/header.php';
             #status-modal { position: absolute !important; }
             #status-modal-overlay { display: none !important; }
         }
-        /* Previous styles... */
-
-    <style>
-        /* Specific handling for Track Status error message */
+        /* Track Status Form Error Styling */
         #track-form .error-message {
-            position: absolute;
-            left: 2rem;
-            bottom: -1.75rem;
-            color: var(--optimum-red, #d32f2f);
-            font-size: 10px;
-            font-weight: 900;
+            margin-top: 0.5rem;
+            color: #dc2626;
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            animation: fadeIn 0.3s ease-out;
+            letter-spacing: 0.08em;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            animation: fadeIn 0.25s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Container error state */
-        .group\/track-container:has(input.error) {
-            border-color: var(--optimum-red, #d32f2f) !important;
-            background-color: rgba(211, 47, 47, 0.05) !important;
-            box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1) !important;
-        }
-
-        /* Reset input error style to not conflict with container */
         #track-form input.error {
-            box-shadow: none !important;
-            border: none !important;
+            border-left-color: #dc2626 !important;
+            background-color: #fef2f2 !important;
+            box-shadow: inset 0 0 0 1px rgba(220, 38, 38, 0.2) !important;
         }
 
         .scroll-reveal {
@@ -340,25 +328,25 @@ require_once APP_PATH . '/views/layouts/header.php';
                 const type = req.request_type.charAt(0).toUpperCase() + req.request_type.slice(1);
                 
                 // Populate Details
-                document.getElementById('notice-name').innerText = req.fullname || 'N/A';
+                document.getElementById('notice-name').innerText = 'Reference holder';
                 document.getElementById('notice-program').innerText = (type === 'Access' ? 'Program Access' : type + ' Assistance');
                 document.getElementById('notice-date-applied').innerText = new Date(req.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 document.getElementById('notice-date-updated').innerText = new Date(req.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 
                 const defaultRemarks = "Please wait for the next update. Our office in-charge will send you an SMS notification with further instructions on your registered contact number.";
-                document.getElementById('status-modal-remarks').innerText = req.latest_remark || defaultRemarks;
+                document.getElementById('status-modal-remarks').innerText = defaultRemarks;
 
                 // Reset styles
                 statusIconContainer.className = "mx-auto flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full sm:mx-0 sm:h-14 sm:w-14 print:hidden";
 
                 if (status === 'approved') {
                     statusModalTitle.innerText = "Notice of Approval";
-                    statusModalMessage.innerHTML = `Your <strong>${type} Assistance</strong> application (#${String(req.id).padStart(4, '0')}) has been <strong>APPROVED</strong> by the SSFO administrator.`;
+                    statusModalMessage.innerHTML = `Your <strong>${type} Assistance</strong> application (#${String(req.id).padStart(4, '0')}) has been <strong>APPROVED</strong> by the Communifund Assistance System administrator.`;
                     statusIcon.className = "fas fa-check-circle text-emerald-600 text-2xl";
                     statusIconContainer.classList.add("bg-emerald-50");
                 } else if (status === 'rejected') {
                     statusModalTitle.innerText = "Application Status";
-                    statusModalMessage.innerHTML = `Your <strong>${type} Assistance</strong> application has been <strong>REJECTED</strong>. Please visit the SSFO office for more details.`;
+                    statusModalMessage.innerHTML = `Your <strong>${type} Assistance</strong> application has been <strong>REJECTED</strong>. Please visit the Communifund assistance office for more details.`;
                     statusIcon.className = "fas fa-times-circle text-red-600 text-2xl";
                     statusIconContainer.classList.add("bg-red-50");
                 } else {

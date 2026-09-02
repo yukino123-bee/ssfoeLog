@@ -19,8 +19,14 @@ require_once APP_PATH . '/views/layouts/header.php';
             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
             <?php if (isset($error_message)): ?>
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-                    <?php echo htmlspecialchars($error_message); ?>
+                <div class="rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm flex items-start gap-3 text-sm text-red-900" role="alert">
+                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="fas fa-exclamation-circle text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-red-950 text-xs uppercase tracking-wider mb-0.5">Registration Error</h4>
+                        <p class="text-xs text-red-700 font-medium leading-relaxed"><?php echo htmlspecialchars($error_message); ?></p>
+                    </div>
                 </div>
             <?php endif; ?>
 

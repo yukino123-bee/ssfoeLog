@@ -160,7 +160,7 @@ function client_has_program_apply_access() {
  *
  * @return array<int, array{label:string,value:string,type:string,href?:string}>
  */
-function program_detail_display_rows($details_json) {
+function program_detail_display_rows($details_json, $request_id = 0) {
     $data = json_decode($details_json ?? '{}', true);
     if (!is_array($data)) {
         return [];
@@ -229,7 +229,9 @@ function program_detail_display_rows($details_json) {
                 'label' => trim($label) . ' (document)',
                 'value' => $file,
                 'type' => 'file',
-                'href' => $file !== '' ? base_url($file) : '',
+                'href' => ($file !== '' && $request_id)
+                    ? base_url('client/document?request_id=' . (int) $request_id . '&field=' . rawurlencode($key))
+                    : '',
             ];
         } else {
             $lbl = $labelMap[$key] ?? ucwords(preg_replace('/([a-z])([A-Z])/', '$1 $2', str_replace('_', ' ', $key)));

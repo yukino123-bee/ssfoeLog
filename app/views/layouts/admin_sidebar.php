@@ -6,7 +6,7 @@
             <i class="fas fa-hand-holding-heart"></i>
         </div>
         <div class="flex flex-col">
-            <span class="text-[17px] font-bold text-white leading-none tracking-tight font-sans">SSFO</span>
+            <span class="text-[17px] font-bold text-white leading-none tracking-tight font-sans">Communifund</span>
             <span class="text-[10px] font-bold text-rose-300 uppercase tracking-widest mt-1 opacity-80">Console</span>
         </div>
     </a>

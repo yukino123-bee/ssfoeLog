@@ -30,8 +30,8 @@
 <body>
     <div class="page">
         <div class="header">
-            <h1>SSFO eLog Program</h1>
-            <p>Social Services & Financial Office (SSFO)</p>
+            <h1>Communifund Assistance System</h1>
+            <p>Community Assistance Portal (CAS)</p>
             <p>Provincial Government Building, Philippines</p>
         </div>
 
@@ -46,7 +46,7 @@
             <p>Greetings,</p>
             <p>We are pleased to inform you that after a thorough review of your application and supporting documents, your request for <strong><?php echo ucfirst($request['request_type']); ?> Assistance</strong> has been officially <strong>APPROVED</strong>.</p>
             
-            <p>Please present this notice and your valid ID at the SSFO window for further instructions regarding the disbursement or availment of your assistance.</p>
+            <p>Please present this notice and your valid ID at the Communifund assistance window for further instructions regarding the disbursement or availment of your assistance.</p>
 
             <div class="details-box">
                 <div class="details-row">
@@ -65,7 +65,7 @@
 
             <p style="text-align: center; font-weight: bold;">Approval Reference ID:</p>
             <div class="approval-id">
-                SSFO-<?php echo str_pad($request['id'], 6, '0', STR_PAD_LEFT); ?>
+                CAS-<?php echo str_pad($request['id'], 6, '0', STR_PAD_LEFT); ?>
             </div>
 
             <div class="signature-area">
@@ -74,7 +74,7 @@
                     <p style="font-size: 12px; text-align: center;">Verified and Signed</p>
                 </div>
                 <div>
-                    <div class="signature-line">HEAD OF SSFO</div>
+                    <div class="signature-line">HEAD OF COMMUNIFUND ASSISTANCE</div>
                     <p style="font-size: 12px; text-align: center;">Approved for Release</p>
                 </div>
             </div>
@@ -82,7 +82,7 @@
 
         <div class="footer">
             <p>This document serves as official proof of approval for the specified assistance request.</p>
-            <p>&copy; <?php echo date('Y'); ?> SSFO eLog. All rights reserved.</p>
+            <p>&copy; <?php echo date('Y'); ?> Communifund Assistance System. All rights reserved.</p>
         </div>
     </div>
 

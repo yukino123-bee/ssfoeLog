@@ -4,5 +4,7 @@ node_modules/
 *.log
 storage/logs/*.log
 storage/rate_limits/*
+storage/backups/
+storage/uploads/
 public/uploads/*
 !public/uploads/.htaccess

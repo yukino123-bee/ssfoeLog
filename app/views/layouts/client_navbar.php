@@ -6,8 +6,8 @@
                 <i class="fas fa-hand-holding-heart"></i>
             </div>
             <div class="leading-none">
-                <span class="text-xl font-black tracking-tighter text-gray-900 block">SSFO</span>
-                <span class="text-[13px] font-bold text-gray-800 tracking-tight -mt-1 block">eLog</span>
+                <span class="text-xl font-black tracking-tighter text-gray-900 block">Communifund</span>
+                <span class="text-[13px] font-bold text-gray-800 tracking-tight -mt-1 block">Assistance System</span>
             </div>
         </a>
     </div>
@@ -161,7 +161,7 @@
         <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
             <div>
                 <h2 class="text-xl font-bold text-slate-900">Menu</h2>
-                <p class="text-xs text-slate-500 mt-0.5">SSFO eLog</p>
+                <p class="text-xs text-slate-500 mt-0.5">Communifund Assistance System</p>
             </div>
             <button id="close-mobile-menu" class="text-slate-400 hover:text-slate-900 text-2xl transition-colors">&times;</button>
         </div>
@@ -211,7 +211,7 @@
 
         <!-- Footer in Drawer -->
         <div class="pt-6 border-t border-gray-100 mt-auto">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Powered by SSFO</p>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Powered by Communifund</p>
         </div>
     </div>
 </div>

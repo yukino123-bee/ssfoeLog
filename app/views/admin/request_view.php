@@ -1,5 +1,5 @@
 <?php
-$detail_rows = program_detail_display_rows($request['details'] ?? '{}');
+$detail_rows = program_detail_display_rows($request['details'] ?? '{}', (int) ($request['id'] ?? 0));
 $detail_fields = array_values(array_filter($detail_rows, fn($r) => ($r['type'] ?? '') === 'text'));
 $detail_files = array_values(array_filter($detail_rows, fn($r) => ($r['type'] ?? '') === 'file'));
 ?>

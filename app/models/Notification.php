@@ -25,9 +25,9 @@ class Notification {
         return $result['count'] ?? 0;
     }
 
-    public function markAsRead($id) {
-        $stmt = $this->db->prepare("UPDATE notifications SET is_read = 1 WHERE id = ?");
-        $stmt->bind_param("i", $id);
+    public function markAsRead($id, $userId) {
+        $stmt = $this->db->prepare("UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $id, $userId);
         return $stmt->execute();
     }
 

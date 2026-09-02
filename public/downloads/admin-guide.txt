@@ -1,4 +1,4 @@
-SSFO Facilitator — Admin Guide (summary)
+Communifund Assistance System — Admin Guide (summary)
 ================================================
 
 1. Dashboard: Review KPIs and recent activity.

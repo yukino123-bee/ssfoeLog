@@ -26,12 +26,100 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Validation Error Messages */
+/* Validation Error Messages & States */
 .error-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: #dc2626;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 6px;
+  line-height: 1.3;
+  animation: errorSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.error-message i {
+  font-size: 0.825rem;
+  flex-shrink: 0;
+}
+
+@keyframes errorSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input Error States */
+input.error,
+select.error,
+textarea.error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+input.error::placeholder,
+textarea.error::placeholder {
+  color: #fca5a5 !important;
+}
+
+/* System Alert Banners */
+.alert-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 12px;
   font-size: 0.875rem;
-  margin-top: 4px;
-  font-weight: 500;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  animation: alertFadeIn 0.3s ease-out;
+}
+
+@keyframes alertFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-banner-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.alert-banner-error .alert-icon {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.alert-banner-success {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.alert-banner-success .alert-icon {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.alert-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.875rem;
 }
 
 /* Links default — remove heavy button look globally */

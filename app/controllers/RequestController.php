@@ -10,7 +10,7 @@ class RequestController {
         $announcementModel = new Announcement();
         $announcements = $announcementModel->getAll(5); // Fetch top 5 recent announcements
         
-        $title = "SSFO eLog - Get Started";
+        $title = "Communifund Assistance System - Get Started";
         require_once APP_PATH . '/views/client/landing.php';
     }
 
@@ -25,12 +25,13 @@ class RequestController {
             $input = $_POST['identifier'] ?? '';
             $identifier = is_string($input) ? strtoupper(trim($input)) : '';
             if (preg_match('/^[A-F0-9]{10}$/', $identifier)) {
-                $requests = $requestModel->getByReferenceNumber($identifier);
+                $requests = $requestModel->getPublicStatusByReferenceNumber($identifier);
             }
-        } elseif (isset($_GET['reference_number']) && is_string($_GET['reference_number'])) {
-            $identifier = strtoupper(trim($_GET['reference_number']));
+        } elseif (isset($_SESSION['track_reference_once']) && is_string($_SESSION['track_reference_once'])) {
+            $identifier = strtoupper(trim($_SESSION['track_reference_once']));
+            unset($_SESSION['track_reference_once']);
             if (preg_match('/^[A-F0-9]{10}$/', $identifier)) {
-                $requests = $requestModel->getByReferenceNumber($identifier);
+                $requests = $requestModel->getPublicStatusByReferenceNumber($identifier);
             }
         }
         
@@ -59,6 +60,12 @@ class RequestController {
                 && in_array($category, $allowedCategories, true)) {
                 $requests = $requestModel->getByEmailTypeAndReferenceWithDetails($email, $category, $reference);
                 $searched = true;
+                if (!empty($requests)) {
+                    session_regenerate_id(true);
+                }
+                foreach ($requests as $matchedRequest) {
+                    $this->authorizeRequestForSession((int) $matchedRequest['id']);
+                }
             }
         }
         
@@ -138,9 +145,9 @@ class RequestController {
                 redirect(base_url('client/' . $request_type));
             }
 
-            $uploadDir = ROOT_PATH . '/public/uploads/requests/';
+            $uploadDir = ROOT_PATH . '/storage/uploads/requests/';
             if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
+                mkdir($uploadDir, 0750, true);
             }
             $maxSize = 10 * 1024 * 1024; // 10MB per file
             $allowedMimes = [
@@ -173,7 +180,7 @@ class RequestController {
                     $targetPath = $uploadDir . $newName;
 
                     if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                        $details[$key . '_path'] = 'uploads/requests/' . $newName;
+                        $details[$key . '_path'] = 'requests/' . $newName;
                     } else {
                         $_SESSION['error_message'] = "Failed to upload $key.";
                         redirect(base_url('client/' . $request_type));
@@ -202,8 +209,14 @@ class RequestController {
             ];
 
             if ($requestModel->create($data)) {
+                $createdRequest = $requestModel->getByReferenceNumber($reference_number);
+                if (!empty($createdRequest[0]['id'])) {
+                    session_regenerate_id(true);
+                    $this->authorizeRequestForSession((int) $createdRequest[0]['id']);
+                }
                 $_SESSION['success_message'] = "Your request has been submitted successfully! Your Reference Number is: " . $reference_number . ". Please save this number to track your request.";
-                redirect(base_url('client/track?reference_number=' . $reference_number));
+                $_SESSION['track_reference_once'] = $reference_number;
+                redirect(base_url('client/track'));
             }
             $_SESSION['error_message'] = "There was an error processing your request. Please try again.";
             redirect(base_url('client/' . $request_type));
@@ -215,29 +228,93 @@ class RequestController {
     }
 
     public function proof() {
-        $ref = $_GET['ref'] ?? null;
-        if (!$ref) {
-            die("Reference Number is missing.");
+        $requestId = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
+        if (!$requestId) {
+            http_response_code(400);
+            exit('Request identifier is missing.');
         }
 
         require_once APP_PATH . '/models/Request.php';
         $requestModel = new Request();
-        $requests = $requestModel->getByReferenceNumber($ref);
-        $request = !empty($requests) ? $requests[0] : null;
+        $request = $requestModel->getById((int) $requestId);
         $id = $request ? $request['id'] : 0;
 
         if (!$request) {
             $_SESSION['error_message'] = "Request not found.";
             redirect(base_url('client/track'));
         }
+
+        if (!$this->canAccessRequest((int) $id)) {
+            $_SESSION['error_message'] = 'Verify your email, category, and reference number before viewing the approval notice.';
+            redirect(base_url('client/details'));
+        }
         
         if ($request['status'] !== 'approved') {
-            $_SESSION['error_message'] = "This application is currently in " . strtoupper($request['status']) . " status. You can only view and print the Proof of Approval once it has been fully APPROVED by the SSFO administrator.";
-            redirect(base_url('client/track?reference_number=' . urlencode($request['reference_number'] ?? '')));
+            $_SESSION['error_message'] = "This application is currently in " . strtoupper($request['status']) . " status. You can only view and print the Proof of Approval once it has been fully APPROVED by the Communifund Assistance System administrator.";
+            redirect(base_url('client/track'));
         }
 
         $title = "Proof of Approval - #" . str_pad($id, 6, '0', STR_PAD_LEFT);
         require_once APP_PATH . '/views/client/proof_of_approval.php';
+    }
+
+    public function document() {
+        $requestId = filter_var($_GET['request_id'] ?? null, FILTER_VALIDATE_INT);
+        $field = is_string($_GET['field'] ?? null) ? $_GET['field'] : '';
+        if (!$requestId || !preg_match('/^[A-Za-z0-9_-]+_path$/', $field) || !$this->canAccessRequest((int) $requestId)) {
+            http_response_code(403);
+            exit('Document access denied.');
+        }
+
+        require_once APP_PATH . '/models/Request.php';
+        $request = (new Request())->getById((int) $requestId);
+        $details = json_decode($request['details'] ?? '{}', true);
+        $storedPath = is_array($details) && is_string($details[$field] ?? null) ? $details[$field] : '';
+        $filename = basename($storedPath);
+        if ($filename === '' || $filename !== basename(str_replace('\\', '/', $storedPath))) {
+            http_response_code(404);
+            exit('Document not found.');
+        }
+
+        $candidates = [
+            ROOT_PATH . '/storage/uploads/requests/' . $filename,
+            ROOT_PATH . '/public/uploads/requests/' . $filename,
+        ];
+        $file = null;
+        foreach ($candidates as $candidate) {
+            if (is_file($candidate)) {
+                $file = $candidate;
+                break;
+            }
+        }
+        if ($file === null) {
+            http_response_code(404);
+            exit('Document not found.');
+        }
+
+        $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file) ?: 'application/octet-stream';
+        header('Content-Type: ' . $mime);
+        header("Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode($filename));
+        header('Content-Length: ' . filesize($file));
+        header('X-Content-Type-Options: nosniff');
+        readfile($file);
+        exit;
+    }
+
+    private function authorizeRequestForSession(int $requestId): void {
+        $_SESSION['authorized_requests'][$requestId] = time() + 1800;
+    }
+
+    private function canAccessRequest(int $requestId): bool {
+        if (($_SESSION['role'] ?? null) === ROLE_ADMIN && !empty($_SESSION['user_id'])) {
+            return true;
+        }
+        $expiresAt = $_SESSION['authorized_requests'][$requestId] ?? 0;
+        if (!is_int($expiresAt) || $expiresAt < time()) {
+            unset($_SESSION['authorized_requests'][$requestId]);
+            return false;
+        }
+        return true;
     }
 
     public function announcementsAjax() {

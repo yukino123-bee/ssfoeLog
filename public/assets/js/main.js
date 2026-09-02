@@ -1,5 +1,5 @@
 /**
- * SSFO eLog - Main JavaScript File
+ * Communifund Assistance System - Main JavaScript File
  * Enhanced UI/UX interactions and functionality
  */
 
@@ -156,6 +156,20 @@
             }
         }
 
+        // Pattern validation
+        if (isValid && field.hasAttribute('pattern') && value) {
+            const patternStr = field.getAttribute('pattern');
+            const patternRegex = new RegExp('^' + patternStr + '$');
+            if (!patternRegex.test(value)) {
+                isValid = false;
+                if (field.name === 'identifier') {
+                    errorMessage = 'Please enter a valid 10-character reference number (e.g. A1B2C3D4E5)';
+                } else {
+                    errorMessage = 'Please enter a valid format';
+                }
+            }
+        }
+
         // Update UI
         if (!isValid) {
             field.classList.add('error');
@@ -170,16 +184,35 @@
 
     function showFieldError(field, message) {
         removeFieldError(field);
+        field.setAttribute('aria-invalid', 'true');
+
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        field.parentElement.appendChild(errorDiv);
+        errorDiv.setAttribute('role', 'alert');
+
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-exclamation-circle text-xs flex-shrink-0';
+
+        const textSpan = document.createElement('span');
+        textSpan.textContent = message;
+
+        errorDiv.appendChild(icon);
+        errorDiv.appendChild(textSpan);
+
+        if (field.parentElement && field.parentElement.classList.contains('relative')) {
+            field.parentElement.appendChild(errorDiv);
+        } else {
+            field.parentElement.appendChild(errorDiv);
+        }
     }
 
     function removeFieldError(field) {
-        const errorMsg = field.parentElement.querySelector('.error-message');
-        if (errorMsg) {
-            errorMsg.remove();
+        field.removeAttribute('aria-invalid');
+        if (field.parentElement) {
+            const errorMsg = field.parentElement.querySelector('.error-message');
+            if (errorMsg) {
+                errorMsg.remove();
+            }
         }
     }
 
@@ -549,29 +582,42 @@
             existing.remove();
         }
 
+        const iconClass = type === 'success' ? 'fa-check-circle text-emerald-600' : (type === 'error' ? 'fa-exclamation-triangle text-red-600' : 'fa-info-circle text-blue-600');
+        const bg = type === 'success' ? '#f0fdf4' : (type === 'error' ? '#fef2f2' : '#eff6ff');
+        const color = type === 'success' ? '#166534' : (type === 'error' ? '#991b1b' : '#1e40af');
+        const border = type === 'success' ? '#bbf7d0' : (type === 'error' ? '#fecaca' : '#bfdbfe');
+
         const notification = document.createElement('div');
-        notification.className = `form-notification ${type}`;
-        notification.textContent = message;
+        notification.className = `form-notification ${type} flex items-start gap-3 shadow-2xl backdrop-blur-md`;
+        notification.innerHTML = `
+            <div class="flex-shrink-0 pt-0.5"><i class="fas ${iconClass} text-lg"></i></div>
+            <div class="flex-1 text-xs font-bold leading-relaxed">${message}</div>
+            <button type="button" class="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity ml-2 text-current" onclick="this.parentElement.remove()">
+                <i class="fas fa-times text-xs"></i>
+            </button>
+        `;
         notification.style.cssText = `
             position: fixed;
             top: 100px;
             right: 20px;
-            padding: 16px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            max-width: 400px;
-            animation: slideIn 0.3s ease;
-            background: ${type === 'success' ? '#d1fae5' : '#fee2e2'};
-            color: ${type === 'success' ? '#065f46' : '#991b1b'};
-            border: 1px solid ${type === 'success' ? '#a7f3d0' : '#fecaca'};
+            max-width: 420px;
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: ${bg};
+            color: ${color};
+            border: 1px solid ${border};
         `;
 
         document.body.appendChild(notification);
 
         setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
+            if (document.body.contains(notification)) {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }
         }, 5000);
     }
 

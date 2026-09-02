@@ -1,5 +1,9 @@
 Options -Indexes
 
+# Application documents are private. The application download endpoint serves
+# authorized files; Apache must never serve this directory directly.
+Require all denied
+
 # Uploaded files are data only. Never execute scripts from this directory.
 <FilesMatch "\.(?:php|phtml|phar|cgi|pl|py|sh|shtml)$">
     Require all denied

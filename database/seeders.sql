@@ -1,7 +1,7 @@
--- SSFO Test Data Seeder
+-- Communifund Assistance System Test Data Seeder
 -- Creates basic required data for the application
 
-USE ssfo;
+USE communifund_assistance;
 
 -- Insert sample programs (Default Programs required for the system to function)
 INSERT IGNORE INTO programs (name, description, icon, category, status, required_documents, custom_fields) VALUES
@@ -11,14 +11,8 @@ INSERT IGNORE INTO programs (name, description, icon, category, status, required
 ('Employment Support', 'Job placement and vocational training assistance', 'briefcase', 'Employment', 'active', '["resume", "pds"]', '{"jobType": "text", "skills": "text"}'),
 ('Emergency Transportation', 'Travel assistance for urgent medical or family needs', 'bus', 'Transport', 'active', '["validid"]', '{"destination": "text", "purpose": "text"}');
 
--- Insert sample admin account (password: admin123)
-INSERT IGNORE INTO users (fullname, email, password, role, phone, address, profile_image) VALUES
-('Admin User', 'admin@ssfo.local', '$2y$12$.4yLHQEAutFQNN3WQFN0I..s7OdkFzlOnSVGdyHQr2h19aFQSjLjG', 'admin', '09123456789', 'SSFO Office, Main Street', 'assets/img/default-avatar.png');
-
--- Insert admin info
-INSERT IGNORE INTO admin_info (user_id, department, position, phone)
-SELECT id, 'Administration', 'Administrator', '09123456789'
-FROM users WHERE email = 'admin@ssfo.local';
+-- Administrators are intentionally not seeded. Provision the first account with
+-- a unique random password through a protected operational process.
 
 -- Verify data insertion
 SELECT COUNT(*) as total_programs FROM programs;
